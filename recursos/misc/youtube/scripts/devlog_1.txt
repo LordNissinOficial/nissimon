@@ -1,0 +1,40 @@
+devlog #1
+nome: nissimon devlog #1: mapas e base.
+
+[video da tela de inicio]
+Iae meu nome e Nissin e eu to fazendo um fangame de pokemon inspirado pela Ásia.
+
+[transição]
+
+[montagem gameplay]
+Antes desse jogo eu tava fazendo um clone de dragon quest, mais depois de um tempo programando eu nao conseguia mais pensar no que fazer,  mais depois de um tempo sem fazer nada [transicao] [montagem pokemon com som] eu comecei a jogar pokemon denovo tentando pegar todos os lendarios em pokeballs normais entao eu decidi usar ele como base para um fangame de pokemon.
+
+[tileset sendo feito]
+eu comecei criando um tileset basico pro jogo e decidi usar o estilo do gameboy color, que significa que cada sprite so tem 4 cores.
+
+[montagem not Tiled]
+depois eu usei o app not Tiled pra criar um mapa e criei um script pra carregar o mapa.
+
+[montagem programando o movimento]
+eu então comecei a programar o movimento do jogador.
+
+[montagem gameplay]
+ja que eu ja tinha suporte para mapas e movimento eu entao decidi criar uma forma do jogador entrar em casas e mapas.
+
+[montagem explicação]
+basicamente como funciona e que toda fez que o jogador termina de andar  ele ve se ta colidindo com algum teletransportador, e se ele ta colidindo eu so carrego o mapa dele.
+
+[montagem inventario]
+depois eu tentei criar um inventario mais ja que eu ainda nao iria implementar itens ainda eu decidi parar.
+
+[montagem fps]
+isso foi basicamente tudo que eu fiz quando o jogo ainda era um clone de dragon quest e eu consegui optimizar ele ate ums 40 fps.
+
+[montagem tileset]
+Quando eu decidi criar um fangame de pokemon eu comecei mudando o tileset e usando uma nova paleta que eu encontrei com as cores usadas no pokemon gold.
+
+[montagem mapa]
+Eu entao fiz um novo mapa para testar tudo, [montagem problema] mais quando eu fui adicionar uma casa para testar se ainda estavam funcionando eu percebi algo, se o tamanho do mapa for menor que o da camera ele fica no topo da tela e buga o display,[mais facil de ver bug] assim e mais facil ver, foi bem facil arrumar isso, [montagem correto] eu so vejo se o mapa e menor que a camera e se ele for eu desloco ele por alguns pixels, eu tambem fiz com que o iogador va pro lugar correto quando ele teleportar.
+
+[montagem thumbnail]
+Depois eu comecei criando um prototipo para a tela de inicio para a thumbnail e é isso que eu fiz ate agora. Obrigado aqueles que viram o video ate o fim e se você gostou do jogo eu agradeceria se se inscreverem e derem um like no vídeo, ate mais falo.[transição]

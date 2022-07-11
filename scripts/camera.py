@@ -22,17 +22,29 @@ class Camera:
 		self.yAntigo = self.y
 		self.x -= self.x - (x-DISPLAY_TAMANHO[0]//2)
 		self.y -= self.y - (y-DISPLAY_TAMANHO[1]//2)
+#		if self.largura>mapa.width:
+#			self.x = 0
+#		if self.altura>=mapa.height:
+#			self.y = 0
+			
+#		self.x = max(0, self.x)
+#		self.y = max(0, self.y)
+		#a = self.x
 		
-		self.x = max(0, self.x)
-		self.y = max(0, self.y)
-		self.x = min(mapa.width*8-DISPLAY_TAMANHO[0], self.x)
-		self.y = min(mapa.height*8-DISPLAY_TAMANHO[1], self.y)
+#		if self.largura<=mapa.width:
+#			self.x = min(mapa.width*8-DISPLAY_TAMANHO[0], self.x)
+#		if self.x<0:
+#			print(mapa.width*8, DISPLAY_TAMANHO[0])
+#		if self.altura<=mapa.height:
+#			self.y = min(mapa.height*8-DISPLAY_TAMANHO[1], self.y)
+#		self.x = 0
+#		self.y = 0
 #		self.posAntiga.x = max(0, self.posAntiga.x)
 #		self.posAntiga.y = max(0, self.posAntiga.y)
 	
 	def mudouPosicao(self):
-		x = int(self.x/8)
-		xAntigo = int(self.xAntigo/8)
-		y = int(self.y/8)
-		yAntigo = int(self.yAntigo/8)
+		x = self.x//8
+		xAntigo = self.xAntigo//8
+		y = self.y//8
+		yAntigo = self.yAntigo//8
 		return xAntigo!=x or yAntigo!=y#self.xAntigo!=self.x or self.yAntigo!=self.y

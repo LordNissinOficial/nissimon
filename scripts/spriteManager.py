@@ -1,6 +1,7 @@
 from pygame.image import load as loadImage
 from pygame.font import (init, Font)
 from functools import cache
+from scripts.config import FUNDO_SPRITESHEET
 
 init()
 
@@ -24,7 +25,7 @@ class SpriteManager():
 		if filename not in self.sprites:
 			try:
 				self.sprites[filename] = loadImage(self.path+filename+".png").convert()
-				self.sprites[filename].set_colorkey((0, 0, 0))
+				self.sprites[filename].set_colorkey(FUNDO_SPRITESHEET)
 			except:
 				raise Exception(f"nao foi possivel carregar arquivo {self.path+filename+'.png'}")
 		

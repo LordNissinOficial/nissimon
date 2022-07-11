@@ -6,17 +6,21 @@ class AnimacaoManager:
 	def __init__(self, spriteManager):
 		self.spriteManager = spriteManager
 		self.animacoes = {}
-		self.animacaoAtual
+		self.animacaoAtual = None
+		self.animacaoNome = None
 		
-	def loadAnimacao(animacaoNome, filename, comeco, tileTamanho, rect, duracoes):
-		self.animacoes[animacaoNome] = Animacao(animacaoNome, filename, comeco, tileTamanho, rect, duracoes)
+	def load(self, animacaoNome, filename, comeco, tileTamanho, rect, duracoes):
+		#self.animacaoNome = animacaoNome
+		self.animacoes[animacaoNome] = Animacao(filename, comeco, tileTamanho, rect, duracoes)
+		
 	
-	def ativarAnimacao(self, animacaoNome):
+	def ativar(self, animacaoNome):
 		self.animacaoAtual = copy(self.animacoes[animacaoNome])
-	
+		self.animacaoNome = animacaoNome
 	def update(self):
-		if self.animacaoAtual.podeUpdatear(time()):
+		if self.animacaoAtual and self.animacaoAtual.podeUpdatear(time()):
 			self.animacaoAtual.update()
 	
 	def conseguirSprite(self):
+		if not self.animacaoAtual: return pg.Surface((100, 150, 200))
 		return self.animacaoAtual.conseguirSprite(self.spriteManager)

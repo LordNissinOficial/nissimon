@@ -18,13 +18,15 @@ def main():
 	fonte = SysFont("Calibri", 10)
 	cenaManager = CenaManager()
 	clock = Clock()
-	while cenaManager.rodando:# and frame<60:
+	while cenaManager.rodando: #and frame<60:
 		#frame += 1
 		cenaManager.update()
 		cenaManager.show(tela)
-		tela.blit(fonte.render(str(round(clock.get_fps())), 0, (100, 100, 100), (62, 39, 49)), (40, 40))
-		#tela.blit(fonte.render(str(cenaManager.spriteManager.load.cache_info()), 0, (100, 100, 100), (62, 39, 49)), (40, 50))
+		tela.blit(fonte.render(str(round(clock.get_fps())), 0, (100, 255, 255), (0, 0, 0)), (40, 40))
+#		jogador = cenaManager.estados[cenaManager.estado].jogador
+#		tela.blit(fonte.render(f"{jogador.movendo}", 0, (100, 255, 255), (62, 39, 49)), (40, 50))
+		#tela.blit(fonte.render(str(cenaManager.spriteManager.load.cache_info()), 0, (100, 255, 255), (62, 39, 49)), (40, 50))
 		update()
-		cenaManager.deltaTime = clock.tick(60)/1000
+		cenaManager.deltaTime = clock.tick(40)/1000
 
 main()

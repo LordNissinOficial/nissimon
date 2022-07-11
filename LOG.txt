@@ -1,115 +1,41 @@
-começou: 24/05/2022 9:20 pm
+começou: 1/07/2022 7:30 pm
 terminou: sem limite
 
-sobre: rpg retro inspirado em dragon quest e final fantasy com o foco principal em diferentes sistemas como alquimia e classes.
-
-ps: o projeto de um clone de pokemon foi usado como base
+sobre: rpg retro estilo pokemon inspirado por pokemon gold com uma astetica parecida.
 
 dia 1:
-
-tempo trabalhando:
-
-5 minutos
-
-feito:
-•me acostumei com o código.
-
-dia 2:
-
-tempo trabalhando:
-
-2 hora e 10 minutos
-
-feito:
-•modificacao do codigo para funcionar com tiles 8x8.
-•adicionado classe para spritesheets.
-•adicionado spritesheet da ui.
-
-dia 3:
-
-tempo trabalhando:
-
-3 hora e 30  minutos
-
-feito:
-•feito mockup de como a ui do jogo poderia olhar.
-•feito mockup de como a tela de início poderia olhar.
-•feito sprites de botoes de inventario, equipamento e status.
-•feito o tileset para o castelo.
-•adicionado suporte para warps.
-
-dia 4:
-
-tempo trabalhando:
-
-2 horas e 10 minutos
-
-feito:
-
-•melhorias na tela de inicio.
-•arrumado bug em que era possivel entrar no warp que estava saindo.
-•criado classe para entidades em geral.
-•entidades agora se movem com delta time.
-•adicionado spritesheet para personagems.
-•adicionado sprites para os  movimentos do jogador.
-
-dia 5:
-
-tempo trabalhando:
-
-1 hora e 55 minutos
-
-feito:
-
-•arrumado pixel errado no castelo do overworld.
-•feito prototipo dos possiveis estilos visuais das batalhas.
-•limpado codigo.
-•comeco da adicao de animacoes.
-•adicionado classe que guarda sprites para serem reusados.
-•feito mudancas no tileset do mapa-mundi.
-
-dia 6:
-
-tempo trabalhando:
-
-1 horas e 30 minutos
-
-feito:
-
-•codigo optimizado para rodar com um fps de 40 em celulares.
-
-dia 7:
-
-tempo trabalhando:
-
-1 hora e 40 minutos
-
-feito:
-•mockup do inventario.
-•base do inventario.
-•tirado botoes da classe do jogador.
-
-dia 8:
 
 tempo trabalhando:
 
 1 hora e 10 minutos
 
 feito:
-•decidido um inventario estilo pokemon.
-•feito mockup do inventario.
-•adicionado fonte.
+•adicionado tileset para casas.
+•arrumado o warp.
 
-dia 9-19:
+dia 2(5/07/2022):
+tempo trabalhando:
 
-descanso
+20 minutos
 
-dia 20:
+feito:
+•camera nao e mais presa ao mapa.
+
+dia 3:
 
 tempo trabalhando:
 
-0 hora e 0 minutos
+1 hora e 0 minutos
+
+feito: 
+•sprites para uma casa, loja e hospital.
+
+dia 4(10/07/2022):
+
+tempo trabalhando:
+
+1 hora e 15 minutos 
 
 feito:
-
-•mapaManager optimizado para poder rodar 4 fps ate quando o mapa esta movendo.
+•implementado animacoes.
+•feito animacoes para o jogador.
