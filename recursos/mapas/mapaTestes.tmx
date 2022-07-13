@@ -16,26 +16,26 @@
   </tileset>
   <layer name="Tile 1" width="20" height="20">
     <data>
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
+      <tile gid="20" />
+      <tile gid="20" />
+      <tile gid="20" />
+      <tile gid="20" />
+      <tile gid="20" />
+      <tile gid="20" />
+      <tile gid="20" />
+      <tile gid="20" />
+      <tile gid="20" />
+      <tile gid="20" />
+      <tile gid="20" />
+      <tile gid="20" />
+      <tile gid="20" />
+      <tile gid="20" />
+      <tile gid="20" />
+      <tile gid="20" />
+      <tile gid="20" />
+      <tile gid="20" />
+      <tile gid="20" />
+      <tile gid="20" />
       <tile gid="26" />
       <tile gid="26" />
       <tile gid="26" />
@@ -396,29 +396,29 @@
       <tile gid="26" />
       <tile gid="26" />
       <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
+      <tile gid="12" />
+      <tile gid="12" />
+      <tile gid="12" />
+      <tile gid="12" />
+      <tile gid="12" />
+      <tile gid="12" />
+      <tile gid="12" />
+      <tile gid="12" />
+      <tile gid="12" />
+      <tile gid="12" />
+      <tile gid="12" />
+      <tile gid="12" />
+      <tile gid="12" />
+      <tile gid="12" />
+      <tile gid="12" />
+      <tile gid="12" />
+      <tile gid="12" />
+      <tile gid="12" />
+      <tile gid="12" />
+      <tile gid="12" />
     </data>
   </layer>
-  <layer name="colisoes" width="20" height="20">
+  <layer name="colisoes" visible="0" width="20" height="20">
     <data>
       <tile gid="65" />
       <tile gid="65" />
