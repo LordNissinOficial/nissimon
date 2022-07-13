@@ -34,8 +34,20 @@ dia 4(10/07/2022):
 
 tempo trabalhando:
 
-1 hora e 15 minutos 
+1 hora e 40 minutos 
 
 feito:
 •implementado animacoes.
 •feito animacoes para o jogador.
+•adicionado fundo infinito aos mapas.
+
+dia 5:(12/07/2022):
+
+tempo trabalhando:
+
+1 horas e 50 minutos
+
+feito:
+•mudado para tiles 16x16.
+•movendo por 16x16.
+•jogador move automaticamente quando entra em mapa.

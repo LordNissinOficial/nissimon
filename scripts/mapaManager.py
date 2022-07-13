@@ -7,7 +7,7 @@ class MapaManager:
 	def __init__(self, camera):
 		self.fundo = None
 		self.camera = camera
-		self.display = Surface((DISPLAY_TAMANHO[0]+8, DISPLAY_TAMANHO[1]+8)).convert()
+		self.display = Surface((DISPLAY_TAMANHO[0]+16, DISPLAY_TAMANHO[1]+16)).convert()
 		self.mapa = None
 		self.colisoes = None
 		self.a = not False
@@ -23,7 +23,6 @@ class MapaManager:
 		self.offsetX = 0
 		self.offsetY = 0
 		self.novoMapa("mapaTestes")
-		#self.novoMapa("mapa-mundi")
 		self.updateDisplay(camera)
 	
 #	def __getstate__(self):
@@ -66,12 +65,12 @@ class MapaManager:
 		self.mapa = TileMap.load(f'recursos/mapas/{filename}.tmx')
 		self.conseguirFundo(filename)
 		if self.mapa.width<self.camera.largura:
-			self.offsetX = (self.camera.largura-self.mapa.width)//2*8
+			self.offsetX = (self.camera.largura-self.mapa.width)//2*16
 		if self.mapa.height<self.camera.altura:
-			self.offsetY = (self.camera.altura-self.mapa.height)//2*8
+			self.offsetY = (self.camera.altura-self.mapa.height)//2*16
 			
 		self.funcoes = self.mapa.layers[-1].objects
-		#if self.warp
+
 		print("funcoes", self.funcoes)
 		self.tileset = self.mapa.tilesets[0]
 		print("tileset", self.tileset.name, "size", (self.tileset.tilewidth, self.tileset.tileheight))
@@ -84,11 +83,15 @@ class MapaManager:
 		self.carregarMapa()
 		self.updateDisplay(self.camera)
 	
-	def conseguirFundo(self, filename):		
-		img = image.load("recursos/sprites/fundos/"+filename+".png")
+	def conseguirFundo(self, filename):
+		try:
+			img = image.load("recursos/sprites/fundos/"+filename+".png")
+		except:
+			img = Surface((16, 16)).convert()
 		self.fundo = [Surface((DISPLAY_TAMANHO[0]+img.get_width(), DISPLAY_TAMANHO[1]+img.get_height())).convert(), img.get_size()]
-		for x in range(DISPLAY_TAMANHO[0]//img.get_width()+1):
-			for y in range(DISPLAY_TAMANHO[1]//img.get_height()+1):
+
+		for y in range(DISPLAY_TAMANHO[1]//img.get_height()+2):
+			for x in range(DISPLAY_TAMANHO[0]//img.get_width()+2):
 				self.fundo[0].blit(img, (x*img.get_width(), y*img.get_height()))
 		
 	def emWarp(self, entidadeRect):
@@ -103,12 +106,11 @@ class MapaManager:
 		for funcao in self.funcoes:
 			if funcao.type=="warp" and self.emWarp(Rect):
 				self.novoMapa(self.conseguirMapaWarp(funcao))
-				#return (funcao.x, funcao.y)
 	
 	def conseguirMapaWarp(self, warp):
 		for propriedade in warp.properties:
 			if propriedade.name=="mapa":
-				return propriedade.value[0:propriedade.value.find(".")]
+				return propriedade.value
 	
 	def tilesPraDicionario(self, tiles):
 		del self.tilesDic
@@ -140,7 +142,7 @@ class MapaManager:
 ##retorna true se a surface for toda transparente
 	def transparente(self, surface):
 		return surface.get_bounding_rect(1).width<1
-			
+
 	def layerPraGrid(self, layer):
 		tiles = layer.tiles
 		grid = []
@@ -148,7 +150,6 @@ class MapaManager:
 		l = []
 		lAppend = l.append
 		y, x = 0, 0
-		
 		for tile in tiles:
 			lAppend(tile.gid)
 			x += 1
@@ -169,12 +170,10 @@ class MapaManager:
 		return Rect((x, y, self.tileset.tilewidth, self.tileset.tileheight))	
 
 	def updateDisplay(self, camera):
-		#print(self.fundo)
 		self.display.fill(FUNDO_SPRITESHEET)
-		#self.display.blit(self.fundo[0], (-self.camera.x%self.fundo[1][0], -self.camera.y%self.fundo[1][1]))
-		self.minY = max(int(camera.y/8), 0)
+		self.minY = max(int(camera.y/16), 0)
 		self.maxY = min(self.minY+camera.altura+1, self.mapa.height)
-		self.minX = max(int(camera.x/8), 0)
+		self.minX = max(int(camera.x/16), 0)
 		self.maxX = min(self.minX+camera.largura+1, self.mapa.width)
 		if self.mapa.width<camera.largura:
 			self.minX = 0
@@ -182,36 +181,7 @@ class MapaManager:
 		if self.mapa.height<camera.altura:
 			self.minY = 0
 			self.maxY = self.mapa.height
-#		print("x", self.minX, self.maxX)
-#		print("y", self.minY, self.maxY)	
-#		if self.a>0:
-#			self.a -=1
-#		else:
-#			return
-#		
-#		if self.minX==self.minXAntigo or self.maxX==self.maxXAntigo or self.minY==self.minYAntigo or self.maxY==self.maxYAntigo:
-#			if self.a:
-#				self.a = False
-#			else:
-#				return
-		#self.a = True
-#			xDiff = camera.xAntigo-camera.x
-#			xDiff = int(xDiff/max(1, xDiff))
-#			yDiff = camera.yAntigo-camera.y
-#			yDiff = int(yDiff/max(1, yDiff))
-#			if xDiff!=0 or yDiff!=0:
-#				#self.a = True
-#				self.display.scroll(xDiff, yDiff)
-#			else:
-#				self.a = True
-#			return 
-#		
-#		if not self.a:
-#			return
-#		else:#if self.a:
-#			self.a = False
-#			#return
-#		#self.a = False
+
 		self.minYAntigo = self.minY
 		self.maxYAntigo = self.maxY
 		self.minXAntigo = self.minX
@@ -223,24 +193,13 @@ class MapaManager:
 		
 		for y in range(self.minY, self.maxY):
 			for x in range(self.minX, self.maxX):
-				self.display.blit(tiles[grid[0][y][x]], (x*tileset.tilewidth-(camera.x//8*8), y*tileset.tileheight-(camera.y//8*8)))
+				self.display.blit(tiles[grid[0][y][x]], (x*tileset.tilewidth-(camera.x//16*16), y*tileset.tileheight-(camera.y//16*16)))
 		self.display.set_colorkey(FUNDO_SPRITESHEET)
-	#			if self.colisoes[y][x]==258:
-#					draw.rect(self.display, (100, 50, 50), (x*tileset.tilewidth-(camera.x//8*8), y*tileset.tileheight-(camera.y//8*8), 2, 2))
-				#self.display.blit(tiles[grid[0][y][x]], (x*tileset.tilewidth-camera.x, y*tileset.tileheight-camera.y))
+
 	
 	def show(self, display):
-		xDiff = self.camera.x%8
-		yDiff = self.camera.y%8
-#			xDiff = self.camera.xAntigo-self.camera.x
-#			xDiff = int(xDiff/max(1, xDiff))
-#			yDiff = self.camera.yAntigo-self.camera.y
-#			yDiff = int(yDiff/max(1, yDiff))
+		xDiff = self.camera.x%16
+		yDiff = self.camera.y%16
+
 		display.blit(self.fundo[0], (-self.camera.x%self.fundo[1][0]-self.fundo[1][0], -self.camera.y%self.fundo[1][1]-self.fundo[1][1]))
 		display.blit(self.display, (-xDiff, -yDiff))
-		#display.blit(self.display, (0, 0))
-		
-	#def showLayer(self, layer, camera, minX, minY, maxX, maxY):		
-#		for y in range(minY, maxY):
-#			for x in range(minX, maxX):
-#				self.display.blit(self.tiles[self.grid[layer][y][x]], (x*self.tileset.tilewidth-int(camera.x), y*self.tileset.tileheight-int(camera.y)))

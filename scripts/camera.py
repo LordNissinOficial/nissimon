@@ -10,8 +10,8 @@ class Camera:
 		self.yAntigo = 0
 #		self.posAntiga = Vector2(0, 0)
 #		self.pos = Vector2(0, 0)
-		self.largura = int(DISPLAY_TAMANHO[0]//8)#//2
-		self.altura = int(DISPLAY_TAMANHO[1]//8)#//2
+		self.largura = int(DISPLAY_TAMANHO[0]//16)#//2
+		self.altura = int(DISPLAY_TAMANHO[1]//16)#//2
 	
 	def moverPara(self, x, y, mapa):
 		#posNova = math.Vector2(x-DISPLAY_TAMANHO[0]//2, y-DISPLAY_TAMANHO[1]//2)
@@ -43,8 +43,8 @@ class Camera:
 #		self.posAntiga.y = max(0, self.posAntiga.y)
 	
 	def mudouPosicao(self):
-		x = self.x//8
-		xAntigo = self.xAntigo//8
-		y = self.y//8
-		yAntigo = self.yAntigo//8
+		x = self.x//16
+		xAntigo = self.xAntigo//16
+		y = self.y//16
+		yAntigo = self.yAntigo//16
 		return xAntigo!=x or yAntigo!=y#self.xAntigo!=self.x or self.yAntigo!=self.y
