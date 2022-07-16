@@ -126,7 +126,7 @@ class Overworld():
 			
 		self.jogador.update(self, cenaManager.deltaTime)
 		self.camera.moverPara(self.jogador.xMovendo, self.jogador.yMovendo, self.mapaManager.mapa)
-	
+		self.mapaManager.updateAnimacoes(self.camera)
 		self.lidarEventos(cenaManager)
 
 	def show(self):

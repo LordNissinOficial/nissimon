@@ -1,5 +1,6 @@
 from __future__ import division
 from pygame import (image, Surface, Rect, draw)
+from time import time
 from scripts.config import *
 from tmx import TileMap
 
@@ -13,6 +14,7 @@ class MapaManager:
 		self.a = not False
 		self.grid = None
 		self.tileset = None
+		self.animacoes  = None
 		self.tilesDic = None
 		self.funcoes = None
 		self.tiles = None
@@ -55,8 +57,10 @@ class MapaManager:
 		del self.funcoes
 		del self.grid
 		del self.colisoes
+		del self.animacoes
 		del self.tiles
 		
+		self.animacoes = []
 		self.camera.x = 0
 		self.camera.y = 0
 		self.offsetX = 0
@@ -73,16 +77,27 @@ class MapaManager:
 
 		print("funcoes", self.funcoes)
 		self.tileset = self.mapa.tilesets[0]
+		
 		print("tileset", self.tileset.name, "size", (self.tileset.tilewidth, self.tileset.tileheight))
 		self.tilesPraDicionario(self.tileset.tiles)
 		tilesetImg = image.load(f"recursos/sprites/tilesets/{self.tileset.image.source.split('/')[-1]}").convert()
 		self.grid = []
 		self.colisoes = []
 		self.tiles = self.tilesetPraLista(tilesetImg, self.tileset.tilewidth, self.tileset.tileheight)
+		self.animacoes = self.conseguirAnimacoes(self.tileset)
 		del tilesetImg
 		self.carregarMapa()
 		self.updateDisplay(self.camera)
 	
+	def conseguirAnimacoes(self, tileset):
+		animacoes = []
+		for tile in tileset.tiles:
+			for frame in tile.animation:
+				frame.tileid += 1
+			animacoes.append([tile.animation, 0, time()])
+			print(tile.animation[0].duration)
+		return animacoes
+		
 	def conseguirFundo(self, filename):
 		try:
 			img = image.load("recursos/sprites/fundos/"+filename+".png")
@@ -168,7 +183,22 @@ class MapaManager:
 		x = pos[0]*self.tileset.tilewidth
 		y = pos[1]*self.tileset.tileheight
 		return Rect((x, y, self.tileset.tilewidth, self.tileset.tileheight))	
-
+	
+	def updateAnimacoes(self, camera):
+		for animacao in self.animacoes:
+			idAntigo = animacao[1]
+			tileIdAntigo = animacao[0][idAntigo].tileid
+			if time()-animacao[2]>=animacao[0][animacao[1]].duration/1000:
+				animacao[2] = time()
+				animacao[1]+=1
+				if animacao[1]==len(animacao[0]):
+					animacao[1] = 0
+			if animacao[1]!=idAntigo:
+				copia = self.tiles[animacao[0][0].tileid].copy()
+				self.tiles[animacao[0][0].tileid] = self.tiles[animacao[0][animacao[1]].tileid].copy()
+				self.tiles[animacao[0][animacao[1]].tileid] = copia
+				self.updateDisplay(camera)
+				
 	def updateDisplay(self, camera):
 		self.display.fill(FUNDO_SPRITESHEET)
 		self.minY = max(int(camera.y/16), 0)
