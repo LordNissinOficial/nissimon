@@ -20,7 +20,9 @@ def main():
 		cenaManager.update()
 		cenaManager.show(tela)
 		tela.blit(fonte.render(str(round(clock.get_fps())), 0, (100, 255, 255), (0, 0, 0)), (40, 40))
+		jogador = cenaManager.estados[cenaManager.estado].jogador
+		tela.blit(fonte.render(str(jogador.mm), 0, (100, 255, 255), (0, 0, 0)), (40, 60))
 		update()
-		cenaManager.deltaTime = clock.tick(30)/1000
+		cenaManager.deltaTime = clock.tick()/1000
 
 main()

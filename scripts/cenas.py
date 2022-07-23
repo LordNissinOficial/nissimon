@@ -113,13 +113,6 @@ class Overworld():
 		botoes["direita"].imgNormal = (2, 0, 2, 2)
 		botoes["direita"].imgPressionando = (2, 2, 2, 2)
 		
-#		botoes["inventario"] = Botao(208, 8, lambda: cenaManager.setJogo(ESTADOS.INVENTARIO.value))
-#		botoes["inventario"].imgNormal = (8, 0, 2, 2)
-#		botoes["inventario"].imgPressionando = (8, 2, 2, 2)
-	
-	#def entrarInventario(self, cenaManager):
-		
-		
 	def update(self, cenaManager):
 		for botao in self.botoes:
 			self.botoes[botao].update()
@@ -130,19 +123,13 @@ class Overworld():
 		self.lidarEventos(cenaManager)
 
 	def show(self):
-		#self.display.fill(COR_FUNDO)
-		#self.mapaDisplay.fill((0, 0, 0))
 		if self.camera.mudouPosicao():
 			self.mapaManager.updateDisplay(self.camera)
-#		else:
-#			self.mapaManager.a = 8
+
 		self.mapaManager.show(self.mapaDisplay)
-		#self.mapaDisplay.blit(self.mapaManager.display, (0, 0))
 		self.jogador.show(self.mapaDisplay, self.camera, self.mapaManager.offsetX, self.mapaManager.offsetY)
-		#self.display.blit(self.mapaDisplay, (48, 0))
 		self.display.blit(self.mapaDisplay, (0, 0))
 		self.showUi()
-		#self.inventario.show(self.display)
 	
 	def showUi(self):
 		for botao in self.botoes:

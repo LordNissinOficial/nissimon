@@ -10,7 +10,6 @@ class AnimacaoManager:
 		self.animacaoNome = None
 		
 	def load(self, animacaoNome, filename, comeco, tileTamanho, rect, duracoes):
-		#self.animacaoNome = animacaoNome
 		self.animacoes[animacaoNome] = Animacao(filename, comeco, tileTamanho, rect, duracoes)
 		
 	

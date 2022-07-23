@@ -5,10 +5,12 @@ class Entidade():
 	def __init__(self, x, y, largura, altura):
 		self.andarAutomatico = 0
 		self.largura = largura//16
+		self.moverCount = 0
 		self.altura = altura//16
 		self.x = x*16
 		self.y = y*16
 		self.xMovendo = x*16
+		self.mm = False
 		self.yMovendo = y*16
 		self.movendo = [False, [0, 0]]
 		self.dentroDeWarp = None #id do warp que usou para nao entrar num warp enquanto sai dele.
@@ -34,6 +36,15 @@ class Entidade():
 				self.animacaoManager.ativar("parado cima")
 				
 	def mover(self, x, y, jogo, continuarMovendo=False):
+		if not self.movendo[0] and (x!=self.movendo[1][0] or y!=self.movendo[1][1]):
+			self.movendo[1] = [x, y]
+			self.moverCount = 5
+			return
+		
+		if self.moverCount>0:
+			self.moverCount-=1
+			return
+
 		if self.andarAutomatico>0: return
 		if not self.movendo[0]:
 			self.movendo[1] = [x, y]
@@ -50,13 +61,15 @@ class Entidade():
 		novoY = self.y//16+y
 
 		if 0<=novoX<len(jogo.mapaManager.colisoes[0])-self.largura+1 and 0<=novoY<len(jogo.mapaManager.colisoes)-self.altura+1:			
-#			for x in range(self.largura):
-#				for y in range(self.altura):					 
+
 			if jogo.mapaManager.colisoes[int(novoY)][int(novoX)]!=65:
 				return False
 			return True
 		return False
 	
+	def m(self):
+		self.mm = not self.mm
+		
 	def updateMovimento(self, jogo, deltaTime):
 		if self.andarAutomatico>0:
 			self.andarAutomatico -= 1
@@ -64,22 +77,12 @@ class Entidade():
 				self.mover(self.movendo[1][0], self.movendo[1][1], jogo)
 		if self.movendo[0]:
 			movendo = True
-			#self.xMovendo += self.movendo[1][0]*48*deltaTime
-#			self.yMovendo += self.movendo[1][1]*48*deltaTime
 			self.xMovendo += self.movendo[1][0]
 			self.yMovendo += self.movendo[1][1]
 			if self.arrumarPosMovendo():
 				self.movendo[0] = False
 				self.xMovendo = self.x
 				self.yMovendo = self.y
-				
-#				if self.emWarp(jogo):
-#					self.movendo = [False, [0, 0]]
-#					jogo.mapaManager.entrarWarp(Rect((self.x, self.y, self.largura*8, self.altura*8)))
-#					self.x = 4*8
-#					self.xMovendo = 4*8
-#					self.y = 4*8
-#					self.yMovendo = 4*8
 				return 
 				
 			if self.xMovendo==self.x and self.yMovendo==self.y:
@@ -94,7 +97,7 @@ class Entidade():
 						
 						jogo.mapaManager.entrarWarp(Rect((self.x, self.y, self.largura*8, self.altura*8)))
 						warp = jogo.mapaManager.funcoes[0]
-						novoX, novoY = (warp.x, warp.y)#jogo.mapaManager.entrarWarp(Rect((self.x, self.y, self.largura*8, self.altura*8)))
+						novoX, novoY = (warp.x, warp.y)
 						self.x = novoX
 						self.xMovendo = novoX
 						self.y = novoY

@@ -10,17 +10,13 @@ class SpriteManager():
 		self.path = "recursos/sprites/"
 		self.spriteAtual = None
 		self.fonte = Font("recursos/alagard.ttf", 16)
-		#self.fonte.set_underline(True)
 		self.sprites = {}
 		self.fontes = {}
 	
 	def underline(bool):
 		self.fonte.set_underline(bool)
-#	def loadFonte(self):
-#		return self.fonte
-#		if filename not in self.fontes:
-#			self.fonte
-	#@cache
+
+	@cache
 	def load(self, filename, rect=None):
 		if filename not in self.sprites:
 			try:

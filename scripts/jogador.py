@@ -6,7 +6,7 @@ from scripts.animacaoManager import AnimacaoManager
 
 
 
-class Jogador(Entidade):#pg.sprite.Sprite):
+class Jogador(Entidade):
 	def __init__(self, x, y, jogo):
 		self.img = load("recursos/sprites/jogador.png").convert()
 		self.animacaoManager = AnimacaoManager(jogo.spriteManager)
@@ -28,7 +28,6 @@ class Jogador(Entidade):#pg.sprite.Sprite):
 		self.updateMovimento(jogo, deltaTime)
 
 	def show(self, display, camera, offsetX, offsetY):
-		x = self.xMovendo-camera.x#+offsetX
-		y = self.yMovendo-camera.y#+offsetY
+		x = self.xMovendo-camera.x
+		y = self.yMovendo-camera.y
 		display.blit(self.animacaoManager.conseguirSprite(), (x, y))
-		#display.blit(self.img, (x, y))		

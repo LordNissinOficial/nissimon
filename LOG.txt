@@ -45,9 +45,28 @@ dia 5:(12/07/2022):
 
 tempo trabalhando:
 
-1 horas e 50 minutos
+2 horas.
 
 feito:
 •mudado para tiles 16x16.
 •movendo por 16x16.
 •jogador move automaticamente quando entra em mapa.
+
+dia 6(15/07/2022):
+
+tempo trabalhando:
+
+1 hora
+
+feito:
+
+•adicionado suporte para animacoes de tile no mapa.
+
+dia 7:
+
+tempo ttrabalhando:
+
+0 horas e 0 minutos
+
+feito:
+
