@@ -70,7 +70,7 @@ class Entidade():
 	def m(self):
 		self.mm = not self.mm
 		
-	def updateMovimento(self, jogo, deltaTime):
+	def updateMovimento(self, jogo):
 		if self.andarAutomatico>0:
 			self.andarAutomatico -= 1
 			if self.andarAutomatico==0:
@@ -92,18 +92,21 @@ class Entidade():
 						continuarMovendo = True
 						break
 				
-				if self.emWarp(jogo):
-						self.movendo[0] = False
-						
-						jogo.mapaManager.entrarWarp(Rect((self.x, self.y, self.largura*8, self.altura*8)))
-						warp = jogo.mapaManager.funcoes[0]
-						novoX, novoY = (warp.x, warp.y)
-						self.x = novoX
-						self.xMovendo = novoX
-						self.y = novoY
-						self.yMovendo = novoY
-						self.andarAutomatico = 5
-						
+				
+					
+				if self.emWarp(jogo, (self.x, self.y, self.largura*16, self.altura*16)):
+						self.movendo[0] = False					
+						jogo.mapaManager.entrarWarp(Rect((self.x, self.y, self.largura*8, self.altura*8)), jogo)
+#						warp = jogo.mapaManager.funcoes[0]
+#						novoX, novoY = (warp.x, warp.y)
+#						self.x = novoX
+#						self.xMovendo = novoX
+#						self.y = novoY
+#						self.yMovendo = novoY
+#						self.andarAutomatico = 5
+#			elif self.movendo[0] and self.emWarp(jogo, (self.x, self.y, 16, 16), False):
+
+#					jogo.fade()
 #						self.x = novoX
 #						self.xMovendo = novoX
 #						self.y = novoY
@@ -113,13 +116,13 @@ class Entidade():
 #						self.y = 4*8
 #						self.yMovendo = 4*8##fazer com que a posicao que acaba no novo mapa ea mesma que o warp
 						
-				if not continuarMovendo:					
-					movendo = False
-					self.movendo[0] = False
-					self.xMovendo = self.x
-					self.yMovendo = self.y
-				else:
-					self.mover(self.movendo[1][0], self.movendo[1][1], jogo, True)
+		#		if not continuarMovendo:					
+#					movendo = False
+#					self.movendo[0] = False
+#					self.xMovendo = self.x
+#					self.yMovendo = self.y
+#				else:
+#					self.mover(self.movendo[1][0], self.movendo[1][1], jogo, True)
 
 	
 	def arrumarPosMovendo(self):
@@ -128,12 +131,13 @@ class Entidade():
 		if self.movendo[1][1]==1 and self.yMovendo>self.y: return True
 		if self.movendo[1][1]==-1 and self.yMovendo<self.y: return True
 
-	def emWarp(self, jogo):
-		warp = jogo.mapaManager.emWarp(Rect(self.x, self.y, self.largura*8, self.altura*8))
+	def emWarp(self, jogo, rect, entrar=True):
+		warp = jogo.mapaManager.emWarp(Rect(rect))
 		if warp:
 			warpId = [propertie.value for propertie in warp.properties if propertie.name=="warp id"][0]
-			if warpId==self.dentroDeWarp: return False
-			self.dentroDeWarp = warpId
+			if entrar:
+				if warpId==self.dentroDeWarp: return False
+				self.dentroDeWarp = warpId
 			return True
 		else:
 			self.dentroDeWarp = None

@@ -10,6 +10,7 @@ init()
 #@profile(filename="profile.prof")
 def main():
 	frame = 0
+	fps = 30
 	flags = DOUBLEBUF|FULLSCREEN
 	tela = set_mode((1920, 1080), flags, 16)
 	fonte = SysFont("Calibri", 10)
@@ -19,10 +20,8 @@ def main():
 	while cenaManager.rodando:
 		cenaManager.update()
 		cenaManager.show(tela)
-		tela.blit(fonte.render(str(round(clock.get_fps())), 0, (100, 255, 255), (0, 0, 0)), (40, 40))
-		jogador = cenaManager.estados[cenaManager.estado].jogador
-		tela.blit(fonte.render(str(jogador.mm), 0, (100, 255, 255), (0, 0, 0)), (40, 60))
+		#tela.blit(fonte.render(str(round(clock.get_fps())), 0, (100, 255, 255), (0, 0, 0)), (40, 40))
 		update()
-		cenaManager.deltaTime = clock.tick()/1000
+		clock.tick(fps)
 
 main()

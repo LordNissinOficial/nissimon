@@ -12,14 +12,14 @@ class AnimacaoManager:
 	def load(self, animacaoNome, filename, comeco, tileTamanho, rect, duracoes):
 		self.animacoes[animacaoNome] = Animacao(filename, comeco, tileTamanho, rect, duracoes)
 		
-	
 	def ativar(self, animacaoNome):
 		self.animacaoAtual = copy(self.animacoes[animacaoNome])
 		self.animacaoNome = animacaoNome
+		
 	def update(self):
 		if self.animacaoAtual and self.animacaoAtual.podeUpdatear(time()):
 			self.animacaoAtual.update()
-	
+		
 	def conseguirSprite(self):
 		if not self.animacaoAtual: return pg.Surface((100, 150, 200))
 		return self.animacaoAtual.conseguirSprite(self.spriteManager)

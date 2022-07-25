@@ -6,6 +6,7 @@ from pygame.locals import (QUIT, MOUSEBUTTONDOWN, MOUSEMOTION, MOUSEBUTTONUP)
 #import pygame as pg
 import pickle, copy
 from enum import Enum
+from scripts.transicao import Transicao
 from scripts.uiComponentes import Botao
 from scripts.inventario import Inventario
 from scripts.spriteManager import SpriteManager
@@ -21,16 +22,25 @@ class CenaManager():
 	def __init__(self):
 		self.estado = ESTADOS.OVERWORLD.value
 		self.spriteManager = SpriteManager()
-		#self.fade = Fade1()
+		self.transicao = Transicao()
+		
 		self.estados = {estado: ESTADOS.estadosClasses.value[estado](self) for estado in ESTADOS.estados.value}
-		self.deltaTime = 0
-		#self.jogoAntigo = None
-		#self.jogo = None
+		for estado in self.estados:
+			self.estados[estado].cenaManager = self
+
 		self.rodando = 1
 		self.eventos = []
-		#self.setJogo(ESTADOS.OVERWORLD)
 		event.set_blocked(None)
 		event.set_allowed([QUIT, MOUSEBUTTONDOWN, MOUSEBUTTONUP, MOUSEMOTION])
+		
+	def fade(self, funcao=None):
+		if not self.transicao.fading:
+			#self.fadeOutFuncao = funcao
+			self.transicao.fadeOut(funcao)
+			#self.transicao.fadeInFuncao = self.jogadorWarp
+			
+	def fadein(self):
+		self.transicao.fadeIn()
 		
 	"""decide o jogo atual"""
 	def setJogo(self, ESTADO):
@@ -49,46 +59,46 @@ class CenaManager():
 	"""updatea o jogo atual"""
 	def update(self):
 		if not self.rodando: return
-#		if self.fade.fading:
-#			if self.fade.fadeout:
-#				self.fade.update(self)
-#				if self.fade.fadein:
-#					self.jogo.setUp(self)
-#					self.jogo.show()					
-#				return
-#			else:
-#				self.fade.update(self)
 		self.eventos = event.get()
 		self.estados[self.estado].update(self)
+		if self.transicao.fading:
+			if self.transicao.fadeout:
+				self.transicao.update()
+				if self.transicao.fadein:
+					#self.estados[self.estado].setUp(self)
+					self.estados[self.estado].show()					
+				return
+			else:
+				self.transicao.update()
+		
 
 	
 	"""desenha na tela o display do jogo atual"""
 	def show(self, tela):
 		if not self.rodando: return
-#		if self.fade.fading:			
-#			if self.fade.fadeout:
-#				displayCopia = self.jogoAntigo.display.copy()
-#			else:
-#				self.jogo.show()
-#				displayCopia = self.jogo.display.copy()
-
-#			self.fade.show(displayCopia)
-#			tela.blit(transform.scale(displayCopia, tela.get_size()), (0, 0))
-#			return
-		#print(self.estados)
 		self.estados[self.estado].show()
+		if self.transicao.fading:			
+			if self.transicao.fadeout:
+				displayCopia = self.estados[self.estado].display.copy()
+			else:
+				self.estados[self.estado].show()
+				displayCopia = self.estados[self.estado].display.copy()
+
+			self.transicao.show(displayCopia)
+			scale(displayCopia, TELA_TAMANHO, tela)
+			return
+
 		scale(self.estados[self.estado].display, TELA_TAMANHO, tela)
-		#print(555)
 
 class Overworld():
 	def __init__(self, cenaManager):
 		self.spriteManager = cenaManager.spriteManager
 		#self.inventario = Inventario(self.spriteManager)
 		self.spriteManager.load("spritesheets/ui")
-		self.deltaTime = 0
 		self.camera = Camera()
 		
-		self.jogador = Jogador(5, 5, self)
+		self.jogador = Jogador(8, 5, self)
+		#self.display = Surface([1920, 1080]).convert()
 		self.display = Surface((256, 144)).convert()
 		self.mapaDisplay = Surface((DISPLAY_TAMANHO)).convert()
 		self.mapaManager = MapaManager(self.camera)
@@ -112,12 +122,28 @@ class Overworld():
 		botoes["direita"] = Botao(32, DISPLAY_TAMANHO_REAL[1]-40, lambda: self.jogador.mover(1, 0, self), True)
 		botoes["direita"].imgNormal = (2, 0, 2, 2)
 		botoes["direita"].imgPressionando = (2, 2, 2, 2)
+	
+	def fade(self, funcao=None):
+		self.cenaManager.fade(lambda: self.jogadorWarp(funcao))
+	
+	def fadein(self):
+		self.cenaManager.fadein(self.jogadorWarp)
+	
+	def jogadorWarp(self, funcao):
+		funcao()
+		warp = self.mapaManager.funcoes[0]
+		novoX, novoY = (warp.x, warp.y)
+		self.jogador.x = novoX
+		self.jogador.xMovendo = novoX
+		self.jogador.y = novoY
+		self.jogador.yMovendo = novoY
+		self.jogador.andarAutomatico = 5
 		
 	def update(self, cenaManager):
 		for botao in self.botoes:
 			self.botoes[botao].update()
 			
-		self.jogador.update(self, cenaManager.deltaTime)
+		self.jogador.update(self)
 		self.camera.moverPara(self.jogador.xMovendo, self.jogador.yMovendo, self.mapaManager.mapa)
 		self.mapaManager.updateAnimacoes(self.camera)
 		self.lidarEventos(cenaManager)

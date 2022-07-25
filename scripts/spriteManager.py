@@ -1,4 +1,5 @@
 from pygame.image import load as loadImage
+from pygame.locals import RLEACCEL
 from pygame.font import (init, Font)
 from functools import cache
 from scripts.config import FUNDO_SPRITESHEET

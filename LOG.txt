@@ -62,11 +62,12 @@ feito:
 
 •adicionado suporte para animacoes de tile no mapa.
 
-dia 7:
+dia 7(24/07/2022):
 
-tempo ttrabalhando:
+tempo trabalhando:
 
-0 horas e 0 minutos
+2 horas e 30 minutos
 
 feito:
-
+•adicionado transições.
+•modificado os tilesets.

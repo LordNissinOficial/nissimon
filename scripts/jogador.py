@@ -1,3 +1,4 @@
+from pygame import draw
 from pygame.image import load
 from scripts.entidade import Entidade
 from scripts.uiComponentes import Botao
@@ -22,12 +23,13 @@ class Jogador(Entidade):
 		Entidade.__init__(self, x, y, self.img.get_width(), self.img.get_height())
 
 	
-	def update(self, jogo, deltaTime):
+	def update(self, jogo):
 		self.updateAnimacao()
 		self.animacaoManager.update()
-		self.updateMovimento(jogo, deltaTime)
+		self.updateMovimento(jogo)
 
 	def show(self, display, camera, offsetX, offsetY):
 		x = self.xMovendo-camera.x
-		y = self.yMovendo-camera.y
+		y = self.yMovendo-camera.y-4
+		#draw.rect(display, (100, 100, 120), (self.x-camera.x, self.y-camera.y, 16, 16))
 		display.blit(self.animacaoManager.conseguirSprite(), (x, y))

@@ -1,5 +1,6 @@
 from __future__ import division
 from pygame import (image, Surface, Rect, draw)
+from pygame.locals import RLEACCEL
 from time import time
 from scripts.config import *
 from tmx import TileMap
@@ -103,6 +104,7 @@ class MapaManager:
 			img = image.load("recursos/sprites/fundos/"+filename+".png")
 		except:
 			img = Surface((16, 16)).convert()
+			img.fill((57, 57, 57))
 		self.fundo = [Surface((DISPLAY_TAMANHO[0]+img.get_width(), DISPLAY_TAMANHO[1]+img.get_height())).convert(), img.get_size()]
 
 		for y in range(DISPLAY_TAMANHO[1]//img.get_height()+2):
@@ -117,10 +119,13 @@ class MapaManager:
 					return funcao
 		return False
 				
-	def entrarWarp(self, Rect):
+	def entrarWarp(self, Rect, jogo):
 		for funcao in self.funcoes:
 			if funcao.type=="warp" and self.emWarp(Rect):
-				self.novoMapa(self.conseguirMapaWarp(funcao))
+				f = lambda: self.novoMapa(self.conseguirMapaWarp(funcao))
+				jogo.fade(f)
+				#self.novoMapa(self.conseguirMapaWarp(funcao))
+				#jogo.fadein()
 	
 	def conseguirMapaWarp(self, warp):
 		for propriedade in warp.properties:
@@ -151,7 +156,9 @@ class MapaManager:
 				rect = Rect((x*tileLargura, y*tileAltura, tileLargura, tileAltura))
 				surface.blit(tileset, (0, 0), rect)
 				if not self.transparente(surface):
-					lista[y*int(tileset.get_width()/tileLargura)+x+1] = surface.convert()
+					surface = surface.convert()
+					surface.set_colorkey(None, RLEACCEL)
+					lista[y*int(tileset.get_width()/tileLargura)+x+1] = surface
 		return lista
 		
 ##retorna true se a surface for toda transparente
