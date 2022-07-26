@@ -1,0 +1,17 @@
+{
+"mapaTestes": {
+	"cima": ["MapaTestes2", 0],
+	"esquerda": ["MapaTestes4", 0],
+	"direita": ["MapaTestes3", 0]
+},
+"MapaTestes2": {
+	"baixo": ["mapaTestes", 0]
+},
+"MapaTestes3": {
+"esquerda": ["mapaTestes", 0]
+},
+"MapaTestes4": {
+"direita": ["mapaTestes", 0]
+},
+"casaTestes": {}
+}

@@ -71,3 +71,13 @@ tempo trabalhando:
 feito:
 •adicionado transições.
 •modificado os tilesets.
+
+dia 8:
+
+tempo trabalhando:
+
+4 horas e 25 minutos
+
+feito:
+•agora possivel conectar mapas.
+•mudado tileset.

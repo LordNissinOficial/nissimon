@@ -1,6 +1,6 @@
 from pygame.font import (init, SysFont)
 from pygame.time import Clock
-from pygame.display import (set_mode, flip, update)
+from pygame.display import (set_mode, update)
 from pygame.locals import (DOUBLEBUF, FULLSCREEN)
 from scripts.cenas import CenaManager
 from profilehooks import profile

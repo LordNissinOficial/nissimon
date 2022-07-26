@@ -1,9 +1,7 @@
-from pygame import event# as event
+from pygame import event
 from pygame import Surface
 from pygame.transform import scale
 from pygame.locals import (QUIT, MOUSEBUTTONDOWN, MOUSEMOTION, MOUSEBUTTONUP)
-#from pygame import ()
-#import pygame as pg
 import pickle, copy
 from enum import Enum
 from scripts.transicao import Transicao
@@ -97,7 +95,7 @@ class Overworld():
 		self.spriteManager.load("spritesheets/ui")
 		self.camera = Camera()
 		
-		self.jogador = Jogador(8, 5, self)
+		self.jogador = Jogador(5, 5, self)
 		#self.display = Surface([1920, 1080]).convert()
 		self.display = Surface((256, 144)).convert()
 		self.mapaDisplay = Surface((DISPLAY_TAMANHO)).convert()
@@ -131,7 +129,7 @@ class Overworld():
 	
 	def jogadorWarp(self, funcao):
 		funcao()
-		warp = self.mapaManager.funcoes[0]
+		warp = self.mapaManager.mapas["centro"].funcoes[0]
 		novoX, novoY = (warp.x, warp.y)
 		self.jogador.x = novoX
 		self.jogador.xMovendo = novoX
@@ -144,7 +142,7 @@ class Overworld():
 			self.botoes[botao].update()
 			
 		self.jogador.update(self)
-		self.camera.moverPara(self.jogador.xMovendo, self.jogador.yMovendo, self.mapaManager.mapa)
+		self.camera.moverPara(self.jogador.xMovendo, self.jogador.yMovendo, self.mapaManager.mapas['centro'])
 		self.mapaManager.updateAnimacoes(self.camera)
 		self.lidarEventos(cenaManager)
 
@@ -153,7 +151,7 @@ class Overworld():
 			self.mapaManager.updateDisplay(self.camera)
 
 		self.mapaManager.show(self.mapaDisplay)
-		self.jogador.show(self.mapaDisplay, self.camera, self.mapaManager.offsetX, self.mapaManager.offsetY)
+		self.jogador.show(self.mapaDisplay, self.camera, self.mapaManager.mapas["centro"].offsetX, self.mapaManager.mapas["centro"].offsetY)
 		self.display.blit(self.mapaDisplay, (0, 0))
 		self.showUi()
 	
