@@ -2,7 +2,7 @@ from pygame import event
 from pygame import Surface
 from pygame.transform import scale
 from pygame.locals import (QUIT, MOUSEBUTTONDOWN, MOUSEMOTION, MOUSEBUTTONUP)
-import pickle, copy
+import copy
 from enum import Enum
 from scripts.transicao import Transicao
 from scripts.uiComponentes import Botao
@@ -20,8 +20,7 @@ class CenaManager():
 	def __init__(self):
 		self.estado = ESTADOS.OVERWORLD.value
 		self.spriteManager = SpriteManager()
-		self.transicao = Transicao()
-		
+		self.transicao = Transicao()	
 		self.estados = {estado: ESTADOS.estadosClasses.value[estado](self) for estado in ESTADOS.estados.value}
 		for estado in self.estados:
 			self.estados[estado].cenaManager = self
@@ -97,6 +96,7 @@ class Overworld():
 		
 		self.jogador = Jogador(5, 5, self)
 		#self.display = Surface([1920, 1080]).convert()
+		self.ma = False
 		self.display = Surface((256, 144)).convert()
 		self.mapaDisplay = Surface((DISPLAY_TAMANHO)).convert()
 		self.mapaManager = MapaManager(self.camera)
@@ -120,7 +120,13 @@ class Overworld():
 		botoes["direita"] = Botao(32, DISPLAY_TAMANHO_REAL[1]-40, lambda: self.jogador.mover(1, 0, self), True)
 		botoes["direita"].imgNormal = (2, 0, 2, 2)
 		botoes["direita"].imgPressionando = (2, 2, 2, 2)
-	
+		#botoes["teste"] = Botao(200, DISPLAY_TAMANHO_REAL[1]-40, self.a)
+#		botoes["teste"].imgNormal = (2, 0, 2, 2)
+#		botoes["teste"].imgPressionando = (2, 2, 2, 2)
+		
+	def a(self):
+		self.ma = not self.ma
+		
 	def fade(self, funcao=None):
 		self.cenaManager.fade(lambda: self.jogadorWarp(funcao))
 	
@@ -147,7 +153,9 @@ class Overworld():
 		self.lidarEventos(cenaManager)
 
 	def show(self):
-		if self.camera.mudouPosicao():
+		if self.ma:#self.camera.mudouPosicao():
+			self.mapaManager.updateDisplay(self.camera)
+		elif self.camera.mudouPosicao():
 			self.mapaManager.updateDisplay(self.camera)
 
 		self.mapaManager.show(self.mapaDisplay)

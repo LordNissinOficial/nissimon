@@ -85,11 +85,12 @@ class Entidade():
 				self.x += x*16
 				self.y += y*16
 		else:
-			self.xMovendo = self.x
-			self.yMovendo = self.y
-			self.movendo[0] = True
-			self.x += x*16
-			self.y += y*16
+			print("se ferro")
+#			self.xMovendo = self.x
+#			self.yMovendo = self.y
+#			self.movendo[0] = True
+#			self.x += x*16
+#			self.y += y*16
 	
 	def podeMover(self, x, y, jogo):
 		novoX = self.x//16+x

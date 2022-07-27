@@ -81,3 +81,14 @@ tempo trabalhando:
 feito:
 •agora possivel conectar mapas.
 •mudado tileset.
+
+dia 9:
+
+tempo trabalhando:
+
+1 horas e 30 minutos
+
+feito:
+•optmizado mudanca de mapa.
+•feito sprite para mostrar nome do mapa entrado.
+•arrumado bug ao mudar de mapa.

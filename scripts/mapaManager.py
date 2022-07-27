@@ -12,6 +12,7 @@ class MapaManager:
 		self.camera = camera
 		self.display = Surface((DISPLAY_TAMANHO[0]+16, DISPLAY_TAMANHO[1]+16)).convert()
 		self.mapas = {"centro": 0, "cima": 0, "baixo": 0, "esquerda": 0, "direita": 0}
+		self.mapasSalvos = {}
 		self.conexoes = loadJson(open("recursos/data/conexoes.json", "r"))
 		self.novoMapa("mapaTestes")
 		#self.updateDisplay(camera)
@@ -39,9 +40,17 @@ class MapaManager:
 	
 	
 	def novoMapa(self, filename, warp=False):
-		print(filename, "\n"*1)
+		print("\n", filename, "\n")
 		self.display.fill((0, 0, 0))
-
+		for mapa in self.mapas:	
+			if not self.mapas[mapa]: continue
+			print(mapa, self.mapas[mapa].filename)
+			if filename==self.mapas[mapa].filename:
+				print("centro", filename, self.mapas[mapa].filename)
+				self.mapas[mapa].conexao = "centro"
+				self.mapas["centro"] = copy(self.mapas[mapa])
+				print(self.mapas["centro"].filename)
+				break
 		for conexao in self.conexoes[filename]:
 			conseguiuMapa = False
 			for mapa in self.mapas:
@@ -49,7 +58,7 @@ class MapaManager:
 					#print("conexao")
 					if self.conexoes[filename][conexao][0]==self.mapas[mapa].filename:
 						#print(mapa)
-						print("conexao", self.mapas[mapa].filename)
+						#print("conexao", self.conexoes[filename][conexao][0], self.mapas[mapa].filename)
 						self.mapas[mapa].conexao = conexao
 						conseguiuMapa = True
 						self.mapas[conexao] = copy(self.mapas[mapa])
@@ -60,15 +69,13 @@ class MapaManager:
 					#print(conexao2)
 
 			if not conseguiuMapa:
-				
-				self.mapas[conexao] = Mapa(self.conexoes[filename][conexao][0], self.camera, self.conexoes[filename][conexao][1], conexao)
+				if self.conexoes[filename][conexao][0] in self.mapasSalvos:
+					self.mapas[conexao] = copy(self.mapasSalvos[self.conexoes[filename][conexao][0]])
+				else:
+					self.mapas[conexao] = Mapa(self.conexoes[filename][conexao][0], self.camera, self.conexoes[filename][conexao][1], conexao)
+					self.mapasSalvos[self.mapas[conexao].filename] = copy(self.mapas[conexao])
 		
-		for mapa in self.mapas:
-			if not self.mapas[mapa]: continue
-			if filename==self.mapas[mapa].filename:
-				self.mapas[mapa].conexao = "centro"
-				self.mapas["centro"] = copy(self.mapas[mapa])
-				break
+		
 		for conexao2 in ["cima", "baixo", "esquerda", "direita"]:
 			if not conexao2 in self.conexoes[filename]:
 				self.mapas[conexao2] = 0
@@ -76,7 +83,7 @@ class MapaManager:
 
 			print("loading mapa")
 			self.mapas["centro"] = Mapa(filename, self.camera, 0, "centro")
-
+#		if seld.mapas["centro"]
 		self.updateDisplay(self.camera)
 	
 	def emWarp(self, entidadeRect):
@@ -120,11 +127,15 @@ class MapaManager:
 
 						return [True, "esquerda"]
 					elif x==len(self.mapas["centro"].colisoes[0]) and self.mapas["direita"] and self.mapas["direita"].colisoes[y+self.mapas["direita"].offset][0]==65:
+						print("novo", self.mapas["direita"].filename)
 						self.novoMapa(self.mapas["direita"].filename)
 						return [True, "direita"]
-
+					else:
+						print(x, y, self.mapas["centro"].filename)
 	def updateAnimacoes(self, camera):
-		pass
+		for mapa in self.mapas:
+			if not self.mapas[mapa]: continue
+			self.mapas[mapa].updateAnimacoes(camera)
 				
 	def updateDisplay(self, camera):
 		self.display.fill((0, 0, 0))
