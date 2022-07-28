@@ -92,3 +92,12 @@ feito:
 •optmizado mudanca de mapa.
 •feito sprite para mostrar nome do mapa entrado.
 •arrumado bug ao mudar de mapa.
+
+dia 10:
+
+tempo trabalhando:
+
+1 horas e 10 minutos
+
+feito:
+•transicao de Batalha.

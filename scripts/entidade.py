@@ -53,6 +53,7 @@ class Entidade():
 		if self.movendo[0] and not continuarMovendo: return
 		podeMover = self.podeMover(x, y, jogo)
 		if not podeMover:	return
+		
 		if self.eJogador:
 			if podeMover[1]=="cima":
 				self.xMovendo = self.x
@@ -104,13 +105,14 @@ class Entidade():
 			if self.andarAutomatico==0:
 				self.mover(self.movendo[1][0], self.movendo[1][1], jogo)
 		if self.movendo[0]:
+			
 			movendo = True
 			self.xMovendo += self.movendo[1][0]
 			self.yMovendo += self.movendo[1][1]
 
 			if self.xMovendo==self.x and self.yMovendo==self.y:
-				self.movendo[0] = False	
-					
+				self.movendo[0] = False
+				jogo.checarGrama(self.x, self.y)
 				if self.emWarp(jogo, (self.x, self.y, self.largura*16, self.altura*16)):
 						self.movendo[0] = False					
 						jogo.mapaManager.entrarWarp(Rect((self.x, self.y, self.largura*8, self.altura*8)), jogo)

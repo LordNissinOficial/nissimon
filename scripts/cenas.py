@@ -1,10 +1,10 @@
 from pygame import event
-from pygame import Surface
+from pygame import (Surface, image)
 from pygame.transform import scale
 from pygame.locals import (QUIT, MOUSEBUTTONDOWN, MOUSEMOTION, MOUSEBUTTONUP)
-import copy
+import copy, random
 from enum import Enum
-from scripts.transicao import Transicao
+from scripts.transicao import (Transicao, TransicaoBatalha)
 from scripts.uiComponentes import Botao
 from scripts.inventario import Inventario
 from scripts.spriteManager import SpriteManager
@@ -21,6 +21,7 @@ class CenaManager():
 		self.estado = ESTADOS.OVERWORLD.value
 		self.spriteManager = SpriteManager()
 		self.transicao = Transicao()	
+		self.transicaoBatalha = TransicaoBatalha()	
 		self.estados = {estado: ESTADOS.estadosClasses.value[estado](self) for estado in ESTADOS.estados.value}
 		for estado in self.estados:
 			self.estados[estado].cenaManager = self
@@ -31,10 +32,16 @@ class CenaManager():
 		event.set_allowed([QUIT, MOUSEBUTTONDOWN, MOUSEBUTTONUP, MOUSEMOTION])
 		
 	def fade(self, funcao=None):
+		self.transicao = Transicao()
 		if not self.transicao.fading:
 			#self.fadeOutFuncao = funcao
 			self.transicao.fadeOut(funcao)
 			#self.transicao.fadeInFuncao = self.jogadorWarp
+	def fadeBatalha(self):
+		self.transicao = TransicaoBatalha()
+		if not self.transicao.fading:
+			#self.fadeOutFuncao = funcao
+			self.transicao.fadeOut(lambda: self.setJogo(ESTADOS.BATALHA.value))
 			
 	def fadein(self):
 		self.transicao.fadeIn()
@@ -90,13 +97,15 @@ class CenaManager():
 class Overworld():
 	def __init__(self, cenaManager):
 		self.spriteManager = cenaManager.spriteManager
+		self.gramaBaixo = image.load("recursos/sprites/gramas/grama_baixo.png").convert()
+		self.gramaBaixo.set_colorkey((100, 100, 100))
 		#self.inventario = Inventario(self.spriteManager)
 		self.spriteManager.load("spritesheets/ui")
 		self.camera = Camera()
 		
-		self.jogador = Jogador(5, 5, self)
+		self.jogador = Jogador(5, 14, self)
 		#self.display = Surface([1920, 1080]).convert()
-		self.ma = False
+		self.gramas = []
 		self.display = Surface((256, 144)).convert()
 		self.mapaDisplay = Surface((DISPLAY_TAMANHO)).convert()
 		self.mapaManager = MapaManager(self.camera)
@@ -120,19 +129,17 @@ class Overworld():
 		botoes["direita"] = Botao(32, DISPLAY_TAMANHO_REAL[1]-40, lambda: self.jogador.mover(1, 0, self), True)
 		botoes["direita"].imgNormal = (2, 0, 2, 2)
 		botoes["direita"].imgPressionando = (2, 2, 2, 2)
-		#botoes["teste"] = Botao(200, DISPLAY_TAMANHO_REAL[1]-40, self.a)
-#		botoes["teste"].imgNormal = (2, 0, 2, 2)
-#		botoes["teste"].imgPressionando = (2, 2, 2, 2)
-		
-	def a(self):
-		self.ma = not self.ma
-		
+
 	def fade(self, funcao=None):
 		self.cenaManager.fade(lambda: self.jogadorWarp(funcao))
 	
 	def fadein(self):
 		self.cenaManager.fadein(self.jogadorWarp)
-	
+		print(3333)
+#	
+	def fadeBatalha(self):
+		self.cenaManager.fadeBatalha()
+		
 	def jogadorWarp(self, funcao):
 		funcao()
 		warp = self.mapaManager.mapas["centro"].funcoes[0]
@@ -145,22 +152,50 @@ class Overworld():
 		
 	def update(self, cenaManager):
 		for botao in self.botoes:
+			if cenaManager.transicao.fading: break
 			self.botoes[botao].update()
+		
+		if not cenaManager.transicao.fading:
 			
-		self.jogador.update(self)
+			self.jogador.update(self)
+		else:
+			self.jogador.movendo[0] = False
+			self.jogador.x = self.jogador.xMovendo
+			self.jogador.y = self.jogador.yMovendo
 		self.camera.moverPara(self.jogador.xMovendo, self.jogador.yMovendo, self.mapaManager.mapas['centro'])
+		
 		self.mapaManager.updateAnimacoes(self.camera)
 		self.lidarEventos(cenaManager)
-
+	
+	def checarGrama(self, x, y):
+		#print(self.mapaManager.mapas["centro"].grid[0], x//16, y//16)
+		if self.mapaManager.mapas["centro"].grid[0][y//16][x//16]==25:
+			#print(5555)
+			if random.randint(1, 100)<=100:
+				self.fadeBatalha()
+#		if self.mapaManager
+#		self.gramas.append([x,  y+4])
+		
 	def show(self):
-		if self.ma:#self.camera.mudouPosicao():
-			self.mapaManager.updateDisplay(self.camera)
-		elif self.camera.mudouPosicao():
+		
+		if self.camera.mudouPosicao():
 			self.mapaManager.updateDisplay(self.camera)
 
 		self.mapaManager.show(self.mapaDisplay)
 		self.jogador.show(self.mapaDisplay, self.camera, self.mapaManager.mapas["centro"].offsetX, self.mapaManager.mapas["centro"].offsetY)
+		
 		self.display.blit(self.mapaDisplay, (0, 0))
+		for grama in self.gramas:
+			pos = [grama[0]-self.camera.x, grama[1]-self.camera.y]
+			self.display.blit(self.gramaBaixo, (pos))
+			#print(grama[1], pos)
+#			self.display.set_at(pos, grama[0])
+#			grama[1][1] += 1
+#			grama[2] -= random.randint(0, 1)
+#			if grama[2]<=0:
+				
+			#print(grama[1])
+			self.gramas.remove(grama)
 		self.showUi()
 	
 	def showUi(self):
@@ -178,15 +213,25 @@ class Overworld():
 				pos = telaParaDisplay(*evento.pos)
 				for botao in self.botoes:
 					self.botoes[botao].tirandoMouse(pos)
+
+class Batalha():
+	def __init__(self, cenaManager):
+		self.display = Surface(DISPLAY_TAMANHO).convert()
+		self.nisimon1 = None#Nisimon()
+		self.nisimon2 = None#Nisimon()
+	
+	def update(self, cenaManager):
+		pass
+	
+	def show(self):
+		self.display.fill((255, 255, 255))
 		
 class ESTADOS(Enum):
 	OVERWORLD = 0
-	INVENTARIO = 1
+	BATALHA = 1
 	MENUPRINCIPAL = 2
-	MENUCONFIGURACOES = 3
-	MENUAJUDA = 4
-	estados = [OVERWORLD, INVENTARIO]#, MENUPRINCIPAL
-	estadosClasses = [Overworld, Inventario]#MenuPrincipal, MenuConfiguracoes]
+	estados = [OVERWORLD, BATALHA]#, MENUPRINCIPAL
+	estadosClasses = [Overworld, Batalha]#MenuPrincipal, MenuConfiguracoes]
 	
 def telaParaDisplay(x, y):
 	return [int(x/TELA_TAMANHO[0]*DISPLAY_TAMANHO_REAL[0]),
