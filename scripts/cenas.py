@@ -1,9 +1,11 @@
 from pygame import event
 from pygame import (Surface, image)
-from pygame.transform import scale
+from pygame.font import (Font, init)
+from pygame.transform import (scale, flip)
 from pygame.locals import (QUIT, MOUSEBUTTONDOWN, MOUSEMOTION, MOUSEBUTTONUP)
-import copy, random
+import copy, random, json
 from enum import Enum
+from scripts.nissimon import Nissimon
 from scripts.transicao import (Transicao, TransicaoBatalha)
 from scripts.uiComponentes import Botao
 from scripts.inventario import Inventario
@@ -13,6 +15,8 @@ from scripts.mapaManager import MapaManager
 from scripts.camera import Camera
 from scripts.jogador import Jogador
 from scripts.config import *
+
+init()
 
 class CenaManager():
 	
@@ -217,14 +221,31 @@ class Overworld():
 class Batalha():
 	def __init__(self, cenaManager):
 		self.display = Surface(DISPLAY_TAMANHO).convert()
-		self.nisimon1 = None#Nisimon()
-		self.nisimon2 = None#Nisimon()
-	
+		self.fonte = Font("recursos/sprites/fonte.ttf", 8)
+		self.nissimonData = json.load(open("recursos/data/nissimons.json", "r"))
+		self.botoes = image.load("recursos/sprites/batalha_botoes.png").convert()
+		self.nissimonUi1 = image.load("recursos/sprites/nissimon_ui.png").convert()
+		self.nissimonUi2 = flip(self.nissimonUi1, True, False)
+		self.nissimon1 = Nissimon(self.nissimonData["charmander"])
+		self.nissimon2 = Nissimon(self.nissimonData["charmander"])
+		self.sprite1 = image.load("recursos/sprites/nissimons/costas.png").convert()
+		self.sprite2 = image.load("recursos/sprites/nissimons/frente.png").convert()
+
 	def update(self, cenaManager):
 		pass
 	
 	def show(self):
 		self.display.fill((255, 255, 255))
+		self.display.blit(self.sprite1, (16, 144-46-56))
+		self.display.blit(self.sprite2, (256-56-16, 8))
+		self.display.blit(self.botoes, (8, 144-45))
+		self.display.blit(self.nissimonUi1, (256-96, 144-45-40))
+		self.display.blit(self.fonte.render(self.nissimon1.nome, 0, (0, 0, 0), (255, 255, 255)), (256-92, 144-45-38))
+		self.display.blit(self.fonte.render(f"LV.{self.nissimon1.level}", 0, (0, 0, 0), (255, 255, 255)), (256-92, 144-45-24+3))
+		
+		self.display.blit(self.nissimonUi2, (8, 25))
+		self.display.blit(self.fonte.render(self.nissimon2.nome, 0, (0, 0, 0), (255, 255, 255)), (14, 45-18))
+		self.display.blit(self.fonte.render(f"LV.{self.nissimon2.level}", 0, (0, 0, 0), (255, 255, 255)), (14, 44))
 		
 class ESTADOS(Enum):
 	OVERWORLD = 0

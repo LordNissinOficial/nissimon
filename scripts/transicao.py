@@ -1,4 +1,4 @@
-from pygame import (Surface, transform, draw)
+from pygame import (Surface, transform, draw, Color)
 from scripts.config import *
 
 
@@ -65,6 +65,7 @@ class Transicao:
 
 class TransicaoBatalha:
 	def __init__(self):
+		self.cor = [255, 255, 255]
 		self.fadeout = False
 		self.fadein = False
 		self.fading = False
@@ -103,6 +104,7 @@ class TransicaoBatalha:
 		if self.fadeout:			
 			self.alpha += 10
 			
+			
 			if self.alpha>255:
 				self.pause -= 1
 				if self.pause>0: return
@@ -115,16 +117,19 @@ class TransicaoBatalha:
 				
 			return
 #		if self.area
-		self.alpha -= 10
-
-		if self.alpha<0:
+		if self.cor==[0, 0, 0]:
+			self.alpha -= 5
+		else:
+			self.cor = [max(self.cor[0]-40, 0), max(self.cor[1]-40, 0), max(self.cor[2]-40, 0)]
+	#		print(self.cor)
+		if self.alpha<0:# and self.cor==(0, 0, 0):
 			self.alpha = 0
 			self.fadein = False
 			self.fading = False
 
 	def show(self, screen):
 		fade = Surface((1, 1)).convert()
-		self.fade.fill((255, 255, 255))
+		self.fade.fill(self.cor)
 		#self.fade.fill(TRANSITION_COLOR)
 		#draw.circle(self.fade, (24, 24, 24), (self.largura/2, self.altura/2), self.area)
 		#self.fade.set_colorkey((24, 24, 24))

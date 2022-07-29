@@ -1,0 +1,13 @@
+{
+	"charmander": {
+		"nome": "CHARMANDER",
+		"hp": 50,
+		"ataque": 52,
+		"ataque especial": 60,
+		"defesa": 43,
+		"defesa especial": 50,
+		"velocidade": 65,
+		"ataques": ["scratch", 0, 0, 0],
+		"level": [5, 10]
+	}
+}
