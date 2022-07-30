@@ -11,9 +11,16 @@ class Botao():
 		else:
 			self.Rect = pg.Rect((x, y), (16, 16))
 		self.pressionado = False
-
+	
+	def setFuncao(self, funcao, funcionarPressionando):
+		self.funcao = funcao
+		self.funcionarPressionando = funcionarPressionando
+		
 	def pressionandoMouse(self, mousePos):
 		if self.Rect.collidepoint(mousePos):
+			if not self.pressionado:
+				if self.funcao:
+					self.funcao()
 			self.pressionado = True
 		else:
 			self.pressionado = False
@@ -21,8 +28,8 @@ class Botao():
 	def tirandoMouse(self, mousePos):
 		if self.Rect.collidepoint(mousePos):
 			self.pressionado = False
-			if self.funcao:
-				self.funcao()
+			#if self.funcao:
+#				self.funcao()
 	
 	def update(self):
 		if not self.pressionado or not self.funcionarPressionando:	return
@@ -30,8 +37,12 @@ class Botao():
 		
 	def show(self, display, spriteManager):
 		if not self.pressionado and self.imgNormal:
-			display.blit(spriteManager.load("spritesheets/ui", self.imgNormal), self.Rect)
+			img = spriteManager.load("spritesheets/ui", self.imgNormal)
+			img.set_alpha(60)
+			display.blit(img, self.Rect)
 		elif self.pressionado and self.imgPressionando:
-			display.blit(spriteManager.load("spritesheets/ui", self.imgPressionando), self.Rect)
+			img = spriteManager.load("spritesheets/ui", self.imgPressionando)
+			img.set_alpha(128)
+			display.blit(img, self.Rect)
 		else:
 			pg.draw.rect(display, (120, 140, 120), self.Rect)

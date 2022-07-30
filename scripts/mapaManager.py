@@ -44,29 +44,20 @@ class MapaManager:
 		self.display.fill((0, 0, 0))
 		for mapa in self.mapas:	
 			if not self.mapas[mapa]: continue
-			print(mapa, self.mapas[mapa].filename)
 			if filename==self.mapas[mapa].filename:
-				print("centro", filename, self.mapas[mapa].filename)
 				self.mapas[mapa].conexao = "centro"
 				self.mapas["centro"] = copy(self.mapas[mapa])
-				print(self.mapas["centro"].filename)
 				break
+				
 		for conexao in self.conexoes[filename]:
 			conseguiuMapa = False
 			for mapa in self.mapas:
 					if not self.mapas[mapa]: continue
-					#print("conexao")
 					if self.conexoes[filename][conexao][0]==self.mapas[mapa].filename:
-						#print(mapa)
-						#print("conexao", self.conexoes[filename][conexao][0], self.mapas[mapa].filename)
 						self.mapas[mapa].conexao = conexao
 						conseguiuMapa = True
 						self.mapas[conexao] = copy(self.mapas[mapa])
 						break
-#					else:
-#						self.mapas[conexao] = 0
-
-					#print(conexao2)
 
 			if not conseguiuMapa:
 				if self.conexoes[filename][conexao][0] in self.mapasSalvos:
@@ -80,10 +71,7 @@ class MapaManager:
 			if not conexao2 in self.conexoes[filename]:
 				self.mapas[conexao2] = 0
 		if not self.mapas["centro"] or warp:
-
-			print("loading mapa")
 			self.mapas["centro"] = Mapa(filename, self.camera, 0, "centro")
-#		if seld.mapas["centro"]
 		self.updateDisplay(self.camera)
 	
 	def emWarp(self, entidadeRect):
@@ -106,25 +94,20 @@ class MapaManager:
 				return propriedade.value
 
 	def podeMover(self, x, y, eJogador):
-
 			if eJogador:
-
 				if 0<=x<len(self.mapas["centro"].colisoes[0]) and 0<=y<len(self.mapas["centro"].colisoes) and self.mapas["centro"].colisoes[y][x]==65:
 					return [True, "centro"]
 				else:
 					if y<0 and self.mapas["cima"] and self.mapas["cima"].colisoes[-1][x+self.mapas["cima"].offset]==65:
 						self.novoMapa(self.mapas["cima"].filename)
-
 						return [True, "cima"]
 						
 					elif y==len(self.mapas["centro"].colisoes) and self.mapas["baixo"] and self.mapas["baixo"].colisoes[0][x+self.mapas["baixo"].offset]==65:
 						self.novoMapa(self.mapas["baixo"].filename)
-
 						return [True, "baixo"]
 					
 					elif x<0 and self.mapas["esquerda"] and self.mapas["esquerda"].colisoes[y+self.mapas["esquerda"].offset][-1]==65:
 						self.novoMapa(self.mapas["esquerda"].filename)
-
 						return [True, "esquerda"]
 					elif x==len(self.mapas["centro"].colisoes[0]) and self.mapas["direita"] and self.mapas["direita"].colisoes[y+self.mapas["direita"].offset][0]==65:
 						print("novo", self.mapas["direita"].filename)
@@ -132,6 +115,7 @@ class MapaManager:
 						return [True, "direita"]
 					else:
 						print(x, y, self.mapas["centro"].filename)
+						
 	def updateAnimacoes(self, camera):
 		for mapa in self.mapas:
 			if not self.mapas[mapa]: continue

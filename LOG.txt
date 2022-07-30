@@ -111,3 +111,16 @@ tempo trabalhando:
 feito:
 •adicionado fonte.
 •aprimorado batalha.
+•feito classe para nissimons.
+
+dia 12:
+
+tempo trabalhando:
+
+4 horas e 10 minutos 
+
+feito:
+•novos sprites de batalha.
+•novos botoes.
+•adicionado botoes na batalha.
+•implementado fugir de batalha.
