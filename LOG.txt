@@ -124,3 +124,12 @@ feito:
 •novos botoes.
 •adicionado botoes na batalha.
 •implementado fugir de batalha.
+
+dia 13 :
+
+tempo trabalhando:
+
+1 horas e 25 minutos 
+
+feito:
+•comecado a implementar ataques na luta.

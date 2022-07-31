@@ -32,7 +32,7 @@ class CenaManager():
 		self.estados = {estado: ESTADOS.estadosClasses.value[estado](self) for estado in ESTADOS.estados.value}
 		for estado in self.estados:
 			self.estados[estado].cenaManager = self
-		self.setJogo(ESTADOS.BATALHA)
+		self.setJogo(ESTADOS.LUTA)
 		self.rodando = 1
 		event.set_blocked(None)
 		event.set_allowed([QUIT, MOUSEBUTTONDOWN, MOUSEBUTTONUP, MOUSEMOTION])
@@ -217,14 +217,15 @@ class Overworld():
 			self.display.blit(self.gramaBaixo, (pos))
 			self.gramas.remove(grama)	
 
-class Batalha():
+class Luta():
 	def __init__(self, cenaManager):
 		self.display = Surface(DISPLAY_TAMANHO).convert()
 		self.fonte = Font("recursos/sprites/fonte.ttf", 8)
 		
 		#self.botoes = [["lutar", "bolsa"], ["nissimon", "fugir"]]
 		self.botoes = [["LUTAR", "BOLSA"], ["NISSIMON", "FUGIR"]]
-		self.botoesFuncoes = [[0, 0], [0, lambda: self.correr(cenaManager)]]
+		self.estado = "botoes"
+		self.botoesFuncoes = [[self.lutar, 0], [0, lambda: self.correr(cenaManager)]]
 		self.botaoIndex = [0, 0]
 		self.index = image.load("recursos/sprites/batalha/index.png").convert()
 		self.hpBar = image.load("recursos/sprites/batalha/hp_bar.png").convert()
@@ -235,12 +236,19 @@ class Batalha():
 		self.nissimon2 = Nissimon(cenaManager.nissimonData["charmander"])
 		self.sprite1 = image.load("recursos/sprites/nissimons/costas.png").convert()
 		self.sprite2 = image.load("recursos/sprites/nissimons/frente.png").convert()
-		self.ui1X = 160
-		self.ui2X = 8
+		#self.estado = "botao"
+		self.ui1X = 164
+		self.ui2X = 4
 		self.ui1Y = 58
 		self.ui2Y = 8
 		self.setUpBotoes(cenaManager)
 	
+	def voltar(self):
+		self.estado = "botoes"
+		
+	def lutar(self):
+		self.estado = "ataques"
+		
 	def correr(self, cenaManager):
 		cenaManager.fade(lambda: cenaManager.setJogo(ESTADOS.OVERWORLD))
 		
@@ -253,12 +261,13 @@ class Batalha():
 		cenaManager.botoes["baixo"].setFuncao(lambda: self.setIndex(0, 1), False)
 		cenaManager.botoes["esquerda"].setFuncao(lambda: self.setIndex(-1, 0), False)
 		cenaManager.botoes["direita"].setFuncao(lambda: self.setIndex(1, 0), False)
-		cenaManager.botoes["b"].setFuncao(None, False)
+		cenaManager.botoes["b"].setFuncao(self.voltar, False)
 		cenaManager.botoes["a"].setFuncao(self.fazerFuncao, False)
 	
 	def fazerFuncao(self):
-		if self.botoesFuncoes[self.botaoIndex[1]][self.botaoIndex[0]]:
-			self.botoesFuncoes[self.botaoIndex[1]][self.botaoIndex[0]]()
+		if self.estado=="botoes":
+			if self.botoesFuncoes[self.botaoIndex[1]][self.botaoIndex[0]]:
+				self.botoesFuncoes[self.botaoIndex[1]][self.botaoIndex[0]]()
 		
 	def setIndex(self, x, y):
 		self.botaoIndex[0] = max(min(self.botaoIndex[0]+x, 1), 0)
@@ -271,45 +280,75 @@ class Batalha():
 		self.display.fill((255, 255, 255))
 
 		self.display.blit(self.sprite1, (16, 46))
-		draw.rect(self.display, (100, 200, 200), (184, 0, 56, 56))
-		#self.display.blit(self.sprite2, (184, 0))
+		#draw.rect(self.display, (100, 200, 200), (184, 0, 56, 56))
+		self.display.blit(self.sprite2, (184, 0))
 		self.showUi()
 	
 	def showUi(self):
 		self.display.blit(self.botoesFundo, (16, 102))
 		self.showNissimonUi1()
 		self.showNissimonUi2()
-		xOffset = 72
+		
+		botoes = self.botoes if self.estado=="botoes" else self.nissimon1.ataques
+		textos = []
+		for y in range(2):
+			textos.append([])
+			for x in range(2):
+				if botoes[y][x]:
+					textos[-1].append(self.fonte.render(botoes[y][x], 0, (0, 0, 0), (255, 255, 255)))
+				else:
+					textos[-1].append(self.fonte.render("-", 0, (0, 0, 0), (255, 255, 255)))
+		textos1Largura = max(textos[0][0].get_width(), textos[1][0].get_width())
+		textos2Largura = max(textos[0][1].get_width(), textos[1][1].get_width())
+		xComeco = 128-(textos1Largura+textos2Largura)/2
+		
+		#draw.rect(self.display, (0, 0, 0), (xComeco-8, 109-3, textos1Largura+textos1Largura, 32), 1)
 		for y in range(2):
 			for x in range(2):
 				if x==self.botaoIndex[0] and y==self.botaoIndex[1]:
-					self.display.blit(self.index, (64+x*xOffset, 108+y*16))				
-				texto = self.fonte.render(self.botoes[y][x], 0, (0, 0, 0), (255, 255, 255))
-				self.display.blit(texto, (73+x*xOffset, 108+y*16))
+					self.display.blit(self.index, (xComeco-6-9+(textos1Largura+12)*x, 109+16*y))
+				self.display.blit(textos[y][x], (xComeco-6+(textos1Largura+12)*x, 109+16*y))
+#		if self.estado=="botoes":
+#			for y in range(2):
+#				for x in range(2):
+#									
+#					texto = self.fonte.render(self.botoes[y][x], 0, (0, 0, 0), (255, 255, 255))
+#					self.display.blit(texto, (72+x*xOffset, 108+y*16))
+#		else:
+#			xOffset = 72
+#			for y in range(2):
+#				for x in range(2):
+#					if x==self.botaoIndex[0] and y==self.botaoIndex[1]:
+#						self.display.blit(self.index, (64+x*xOffset, 108+y*16))
+
 		
+
 	def showNissimonUi1(self):
 		self.display.blit(self.nissimonUi1, (self.ui1X, self.ui1Y))
 		self.display.blit(self.fonte.render(self.nissimon1.nome, 0, (0, 0, 0), (255, 255, 255)), (self.ui1X+4, self.ui1Y+2))
-		self.display.blit(self.hpBar, (self.ui1X+4, self.ui1Y+12))
-		draw.rect(self.display, (95, 205, 8), (self.ui1X+16, self.ui1Y+14, int(self.nissimon1.hp/self.nissimon1.hpMaximo*60), 3))
-		self.display.blit(self.fonte.render(f"{self.nissimon1.hp}/{self.nissimon1.hpMaximo}", 0, (0, 0, 0), (255, 255, 255)), (self.ui1X-6, self.ui1Y+20))
-		self.display.blit(self.fonte.render(f"lv{self.nissimon1.level}", 0, (0, 0, 0), (255, 255, 255)), (self.ui1X+52, self.ui1Y+20))
+		self.display.blit(self.hpBar, (self.ui1X+6, self.ui1Y+12))
+		draw.rect(self.display, (95, 205, 8), (self.ui1X+18, self.ui1Y+14, int(self.nissimon1.hp/self.nissimon1.hpMaximo*60), 3))
+		
+		level = self.fonte.render(f"lv{self.nissimon1.level}", 0, (0, 0, 0), (255, 255, 255))
+		hp = self.fonte.render(f"{self.nissimon1.hp}/{self.nissimon1.hpMaximo}", 0, (0, 0, 0), (255, 255, 255))
+		levelX = (self.ui1X+83)-level.get_width()#self.ui1X+52
+		self.display.blit(hp, (levelX-hp.get_width()-3, self.ui1Y+20))
+		self.display.blit(level, (levelX, self.ui1Y+20))
 		largura = int(self.nissimon1.xp/self.nissimon1.xpMaximo*77)
 		draw.rect(self.display, (82, 74, 255), (self.ui1X+82-largura, self.ui1Y+29, largura, 1))
 	
 	def showNissimonUi2(self):
 		self.display.blit(self.nissimonUi2, (self.ui2X, self.ui2Y))
-		self.display.blit(self.fonte.render(self.nissimon2.nome, 0, (0, 0, 0), (255, 255, 255)), (self.ui2X+4, self.ui2Y+2))
-		self.display.blit(self.hpBar, (self.ui2X+4, self.ui2Y+12))
-		draw.rect(self.display, (98, 205, 8), (self.ui2X+16, self.ui2Y+14, int(self.nissimon2.hp/self.nissimon2.hpMaximo*60), 3))
-		self.display.blit(self.fonte.render(f"lv{self.nissimon2.level}", 0, (0, 0, 0), (255, 255, 255)), (self.ui2X+24, self.ui2Y+20))
-		
+		self.display.blit(self.fonte.render(self.nissimon2.nome, 0, (0, 0, 0), (255, 255, 255)), (self.ui2X+8, self.ui2Y+2))
+		self.display.blit(self.hpBar, (self.ui2X+10, self.ui2Y+12))
+		draw.rect(self.display, (98, 205, 8), (self.ui2X+22, self.ui2Y+14, int(self.nissimon2.hp/self.nissimon2.hpMaximo*60), 3))
+		self.display.blit(self.fonte.render(f"lv{self.nissimon2.level}", 0, (0, 0, 0), (255, 255, 255)), (self.ui2X+8, self.ui2Y+20))
+
 class ESTADOS(Enum):
 	OVERWORLD = 0
-	BATALHA = 1
-	MENUPRINCIPAL = 2
-	estados = [OVERWORLD, BATALHA]#, MENUPRINCIPAL
-	estadosClasses = [Overworld, Batalha]#MenuPrincipal, MenuConfiguracoes]
+	LUTA = 1
+	estados = [OVERWORLD, LUTA]#, MENUPRINCIPAL
+	estadosClasses = [Overworld, Luta]#MenuPrincipal, MenuConfiguracoes]
 	
 def telaParaDisplay(x, y):
 	return [int(x/TELA_TAMANHO[0]*DISPLAY_TAMANHO_REAL[0]),

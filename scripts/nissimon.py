@@ -12,6 +12,6 @@ class Nissimon:
 		self.nome = jsonData["nome"]
 		self.level = randint(jsonData["level"][0], jsonData["level"][1])
 		self.condicao = 0
-		self.xp = 20
+		self.xp = 0
 		self.xpMaximo = 100
 	
