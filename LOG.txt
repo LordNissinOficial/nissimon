@@ -135,10 +135,17 @@ feito:
 •comecado a implementar ataques na luta.
 
 dia 14:
-
 tempo trabalhando:
 
 45 minutos
 
 feito:
 •possivel usar ataques em batalha.
+
+dia 15:
+
+tempo trabalhando:
+
+0 horas e 0 minutos
+
+feito:

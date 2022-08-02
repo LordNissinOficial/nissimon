@@ -4,6 +4,7 @@ class Botao():
 	def __init__(self, x, y, funcao=None, funcionarPressionando=False):
 		self.funcionarPressionando = funcionarPressionando
 		self.funcao = funcao
+		self.funcaoSolto = None
 		self.imgNormal = None
 		self.imgPressionando = None
 		if self.imgNormal:
@@ -15,6 +16,8 @@ class Botao():
 	def setFuncao(self, funcao, funcionarPressionando):
 		self.funcao = funcao
 		self.funcionarPressionando = funcionarPressionando
+	def setFuncaoSolto(self, funcao):
+		self.funcaoSolto = funcao
 		
 	def pressionandoMouse(self, mousePos):
 		if self.Rect.collidepoint(mousePos):
@@ -28,8 +31,8 @@ class Botao():
 	def tirandoMouse(self, mousePos):
 		if self.Rect.collidepoint(mousePos):
 			self.pressionado = False
-			#if self.funcao:
-#				self.funcao()
+			if self.funcaoSolto:
+				self.funcaoSolto()
 	
 	def update(self):
 		if not self.pressionado or not self.funcionarPressionando:	return

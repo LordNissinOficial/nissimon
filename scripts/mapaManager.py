@@ -3,6 +3,7 @@ from pygame import (image, Surface, Rect, draw)
 from pygame.locals import RLEACCEL
 from time import time
 from copy import copy
+import json
 from json import load as loadJson
 from scripts.config import *
 from tmx import TileMap
@@ -183,6 +184,8 @@ class Mapa:
 	def load(self, warp=None):
 		self.display.fill((0, 0, 0))
 		self.animacoes = []
+		self.dialogos = json.load(open(f"recursos/data/dialogos/{self.filename}.json", "r"))
+		self.npcs = json.load(open(f"recursos/data/npcs/{self.filename}.json", "r"))
 
 		self.offsetX = 0
 		self.offsetY = 0
@@ -356,6 +359,10 @@ class Mapa:
 					offsetX = self.mapa.width*16
 
 				self.display.blit(tiles[grid[0][y][x]], (x*tileset.tilewidth-(camera.x//16*16)+offsetX, y*tileset.tileheight-(camera.y//16*16)+offsetY))
+
+				for npc in self.npcs:
+					if x==npc["pos"][0] and y==npc["pos"][1]:
+						draw.rect(self.display, (87, 87, 87), (x*tileset.tilewidth-(camera.x//16*16)+offsetX, y*tileset.tileheight-(camera.y//16*16)+offsetY-4, 16, 16))
 		self.display.set_colorkey(FUNDO_SPRITESHEET)
 	
 	def show(self, display):

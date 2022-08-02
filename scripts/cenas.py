@@ -9,6 +9,7 @@ from scripts.nissimon import Nissimon
 from scripts.transicao import (Transicao, TransicaoBatalha)
 from scripts.uiComponentes import Botao
 from scripts.inventario import Inventario
+from scripts.dialogoManager import DialogoManager
 from scripts.spriteManager import SpriteManager
 from scripts.spritesheet import SpriteSheet
 from scripts.mapaManager import MapaManager
@@ -144,6 +145,7 @@ class CenaManager():
 class Overworld():
 	def __init__(self, cenaManager):
 		self.spriteManager = cenaManager.spriteManager
+		self.dialogoManager = DialogoManager()
 		self.gramaBaixo = image.load("recursos/sprites/gramas/grama_baixo.png").convert()
 		self.gramaBaixo.set_colorkey((100, 100, 100))
 		self.spriteManager.load("spritesheets/ui")
@@ -165,8 +167,18 @@ class Overworld():
 		cenaManager.botoes["direita"].setFuncao(lambda: self.jogador.mover(1, 0, self), True)
 		
 		cenaManager.botoes["b"].setFuncao(None, False)
-		cenaManager.botoes["a"].setFuncao(None, False)
-
+		cenaManager.botoes["a"].setFuncao(self.a, False)
+		cenaManager.botoes["a"].setFuncaoSolto(self.aSolto)
+		
+	def a(self):
+		if self.dialogoManager.emDialogo:
+			self.dialogoManager.timerTanto = 0
+		
+			
+	def aSolto(self):
+		if self.dialogoManager.emDialogo:
+			self.dialogoManager.timerTanto = 1
+			
 	def fade(self, funcao=None):
 		self.cenaManager.fade(lambda: self.jogadorWarp(funcao))
 	
@@ -190,7 +202,7 @@ class Overworld():
 		
 		
 		if not cenaManager.transicao.fading:
-			
+			self.dialogoManager.update()
 			self.jogador.update(self)
 		else:
 			self.jogador.movendo[0] = False
@@ -217,6 +229,7 @@ class Overworld():
 			pos = [grama[0]-self.camera.x, grama[1]-self.camera.y]
 			self.display.blit(self.gramaBaixo, (pos))
 			self.gramas.remove(grama)	
+		self.dialogoManager.show(self.display)
 
 class Luta():
 	def __init__(self, cenaManager):
@@ -230,7 +243,7 @@ class Luta():
 		self.botaoIndex = [0, 0]
 		self.index = image.load("recursos/sprites/batalha/index.png").convert()
 		self.hpBar = image.load("recursos/sprites/batalha/hp_bar.png").convert()
-		self.botoesFundo = image.load("recursos/sprites/batalha/botoes.png").convert()
+		self.botoesFundo = image.load("recursos/sprites/caixa_de_texto.png").convert()
 		self.nissimonUi1 = image.load("recursos/sprites/batalha/nissimon_ui.png").convert()
 		self.nissimonUi2 = flip(self.nissimonUi1, True, False)
 		self.nissimon1 = cenaManager.party[0]
