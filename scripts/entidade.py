@@ -13,7 +13,7 @@ class Entidade():
 		self.xMovendo = x*16
 		self.mm = False
 		self.yMovendo = y*16
-		self.movendo = [False, [0, 0]]
+		self.movendo = [False, [1, 0]]
 		self.dentroDeWarp = None #id do warp que usou para nao entrar num warp enquanto sai dele.
 	
 	def updateAnimacao(self):

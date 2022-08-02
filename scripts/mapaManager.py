@@ -14,7 +14,7 @@ class MapaManager:
 		self.mapas = {"centro": 0, "cima": 0, "baixo": 0, "esquerda": 0, "direita": 0}
 		self.mapasSalvos = {}
 		self.conexoes = loadJson(open("recursos/data/conexoes.json", "r"))
-		self.novoMapa("mapaTestes")
+		self.novoMapa("casaTestes")
 		#self.updateDisplay(camera)
 	
 #	def __getstate__(self):

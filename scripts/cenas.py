@@ -23,16 +23,17 @@ class CenaManager():
 	"""classe principal que cuida do jogo atual"""	
 	def __init__(self):
 		self.nissimonData = json.load(open("recursos/data/nissimons.json", "r"))
+		self.movimentosData = json.load(open("recursos/data/movimentos.json", "r"))
 		self.party = [Nissimon(self.nissimonData["charmander"])]
 		self.botoes = {}
-		self.setBotoes()
+		self.setBotoes() 
 		self.spriteManager = SpriteManager()
 		self.transicao = Transicao()	
 		self.transicaoBatalha = TransicaoBatalha()	
 		self.estados = {estado: ESTADOS.estadosClasses.value[estado](self) for estado in ESTADOS.estados.value}
 		for estado in self.estados:
 			self.estados[estado].cenaManager = self
-		self.setJogo(ESTADOS.LUTA)
+		self.setJogo(ESTADOS.OVERWORLD)
 		self.rodando = 1
 		event.set_blocked(None)
 		event.set_allowed([QUIT, MOUSEBUTTONDOWN, MOUSEBUTTONUP, MOUSEMOTION])
@@ -73,7 +74,7 @@ class CenaManager():
 	def fadeBatalha(self):
 		self.transicao = TransicaoBatalha()
 		if not self.transicao.fading:
-			self.transicao.fadeOut(lambda: self.setJogo(ESTADOS.BATALHA))
+			self.transicao.fadeOut(lambda: self.setJogo(ESTADOS.LUTA))
 			
 	def fadein(self):
 		self.transicao.fadeIn()
@@ -147,7 +148,7 @@ class Overworld():
 		self.gramaBaixo.set_colorkey((100, 100, 100))
 		self.spriteManager.load("spritesheets/ui")
 		self.camera = Camera()	
-		self.jogador = Jogador(5, 6, self)
+		self.jogador = Jogador(3, 4, self)
 		self.gramas = []
 		self.display = Surface((256, 144)).convert()
 		self.mapaDisplay = Surface((DISPLAY_TAMANHO)).convert()
@@ -241,7 +242,7 @@ class Luta():
 		self.ui2X = 4
 		self.ui1Y = 58
 		self.ui2Y = 8
-		self.setUpBotoes(cenaManager)
+		
 	
 	def voltar(self):
 		self.estado = "botoes"
@@ -254,6 +255,8 @@ class Luta():
 		
 	def setUp(self, cenaManager):
 		self.botaoIndex = [0, 0]
+		self.nissimon2 = Nissimon(cenaManager.nissimonData["charmander"])
+		self.estado = "botoes"
 		self.setUpBotoes(cenaManager)
 		
 	def setUpBotoes(self, cenaManager):
@@ -268,6 +271,28 @@ class Luta():
 		if self.estado=="botoes":
 			if self.botoesFuncoes[self.botaoIndex[1]][self.botaoIndex[0]]:
 				self.botoesFuncoes[self.botaoIndex[1]][self.botaoIndex[0]]()
+		else:
+			ataque = self.nissimon1.ataques[self.botaoIndex[1]][self.botaoIndex[0]]
+			if ataque:
+				self.nissimon2.hp -= self.calcularDano(self.cenaManager.movimentosData[ataque])
+				self.nissimon2.hp = max(self.nissimon2.hp, 0)
+				if self.nissimon2.hp==0:
+					self.correr(self.cenaManager)
+					
+	def calcularDano(self, ataque):
+		nssm1 = self.nissimon1
+		nssm2 = self.nissimon2
+		a = nssm1.stats[1] if ataque["categoria"]=="fisico" else nssm1.stats[4]
+		d = nssm2.stats[2] if ataque["categoria"]=="fisico" else nssm2.stats[5]
+		item = 1
+		critico = 1
+		temporal = 1
+		insignia = 1
+		stab = 1.5 if ataque["tipo"] in nssm1.tipos else 1
+		tipo = 1
+		rand = random.randint(217, 255)/255
+		form1 = (2*nssm1.level/5+2)*ataque["poder"]*(a/d)
+		return int(((form1/50)*item*critico+2)*temporal*insignia*stab*tipo*rand)
 		
 	def setIndex(self, x, y):
 		self.botaoIndex[0] = max(min(self.botaoIndex[0]+x, 1), 0)
@@ -306,8 +331,8 @@ class Luta():
 		for y in range(2):
 			for x in range(2):
 				if x==self.botaoIndex[0] and y==self.botaoIndex[1]:
-					self.display.blit(self.index, (xComeco-6-9+(textos1Largura+12)*x, 109+16*y))
-				self.display.blit(textos[y][x], (xComeco-6+(textos1Largura+12)*x, 109+16*y))
+					self.display.blit(self.index, (xComeco-6-9+(textos1Largura+10)*x, 109+16*y))
+				self.display.blit(textos[y][x], (xComeco-6+(textos1Largura+10)*x, 109+16*y))
 #		if self.estado=="botoes":
 #			for y in range(2):
 #				for x in range(2):
@@ -327,21 +352,21 @@ class Luta():
 		self.display.blit(self.nissimonUi1, (self.ui1X, self.ui1Y))
 		self.display.blit(self.fonte.render(self.nissimon1.nome, 0, (0, 0, 0), (255, 255, 255)), (self.ui1X+4, self.ui1Y+2))
 		self.display.blit(self.hpBar, (self.ui1X+6, self.ui1Y+12))
-		draw.rect(self.display, (95, 205, 8), (self.ui1X+18, self.ui1Y+14, int(self.nissimon1.hp/self.nissimon1.hpMaximo*60), 3))
+		draw.rect(self.display, (95, 205, 8), (self.ui1X+18, self.ui1Y+14, int(self.nissimon1.hp/self.nissimon1.stats[0]*60), 3))
 		
 		level = self.fonte.render(f"lv{self.nissimon1.level}", 0, (0, 0, 0), (255, 255, 255))
-		hp = self.fonte.render(f"{self.nissimon1.hp}/{self.nissimon1.hpMaximo}", 0, (0, 0, 0), (255, 255, 255))
+		hp = self.fonte.render(f"{self.nissimon1.hp}/{self.nissimon1.stats[0]}", 0, (0, 0, 0), (255, 255, 255))
 		levelX = (self.ui1X+83)-level.get_width()#self.ui1X+52
 		self.display.blit(hp, (levelX-hp.get_width()-3, self.ui1Y+20))
 		self.display.blit(level, (levelX, self.ui1Y+20))
-		largura = int(self.nissimon1.xp/self.nissimon1.xpMaximo*77)
+		largura = int(self.nissimon1.xp/self.nissimon1.stats[0]*77)
 		draw.rect(self.display, (82, 74, 255), (self.ui1X+82-largura, self.ui1Y+29, largura, 1))
 	
 	def showNissimonUi2(self):
 		self.display.blit(self.nissimonUi2, (self.ui2X, self.ui2Y))
 		self.display.blit(self.fonte.render(self.nissimon2.nome, 0, (0, 0, 0), (255, 255, 255)), (self.ui2X+8, self.ui2Y+2))
 		self.display.blit(self.hpBar, (self.ui2X+10, self.ui2Y+12))
-		draw.rect(self.display, (98, 205, 8), (self.ui2X+22, self.ui2Y+14, int(self.nissimon2.hp/self.nissimon2.hpMaximo*60), 3))
+		draw.rect(self.display, (98, 205, 8), (self.ui2X+22, self.ui2Y+14, int(self.nissimon2.hp/self.nissimon2.stats[0]*60), 3))
 		self.display.blit(self.fonte.render(f"lv{self.nissimon2.level}", 0, (0, 0, 0), (255, 255, 255)), (self.ui2X+8, self.ui2Y+20))
 
 class ESTADOS(Enum):

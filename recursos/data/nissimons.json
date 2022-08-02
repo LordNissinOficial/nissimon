@@ -1,13 +1,9 @@
 {
 	"charmander": {
 		"nome": "CHARMANDER",
-		"hp": 50,
-		"ataque": 52,
-		"ataque especial": 60,
-		"defesa": 43,
-		"defesa especial": 50,
-		"velocidade": 65,
-		"ataques": [["SCRATCH", 0], [0, 0]],
+		"tipos": ["fogo"],
+		"stats": [50, 52, 43, 65, 60, 60],
+		"ataques": [["scratch", 0], [0, 0]],
 		"level": [3, 10]
 	}
 }
