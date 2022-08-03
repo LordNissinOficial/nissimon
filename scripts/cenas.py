@@ -154,27 +154,36 @@ class Overworld():
 		self.gramas = []
 		self.display = Surface((256, 144)).convert()
 		self.mapaDisplay = Surface((DISPLAY_TAMANHO)).convert()
-		self.mapaManager = MapaManager(self.camera)
+		self.mapaManager = MapaManager(self.camera,  self)
 		self.botoes = {}
 	
 	def setUp(self, cenaManager):
 		self.setUpBotoes(cenaManager)
 		
 	def setUpBotoes(self, cenaManager):
-		cenaManager.botoes["cima"].setFuncao(lambda: self.jogador.mover(0, -1, self), True)
-		cenaManager.botoes["baixo"].setFuncao(lambda: self.jogador.mover(0, 1, self), True)
-		cenaManager.botoes["esquerda"].setFuncao(lambda: self.jogador.mover(-1, 0, self), True)
-		cenaManager.botoes["direita"].setFuncao(lambda: self.jogador.mover(1, 0, self), True)
+		cenaManager.botoes["cima"].setFuncao(lambda: self.moverJogador(0, -1), True)
+		cenaManager.botoes["baixo"].setFuncao(lambda: self.moverJogador(0, 1), True)
+		cenaManager.botoes["esquerda"].setFuncao(lambda: self.moverJogador(-1, 0), True)
+		cenaManager.botoes["direita"].setFuncao(lambda: self.moverJogador(1, 0), True)
 		
 		cenaManager.botoes["b"].setFuncao(None, False)
 		cenaManager.botoes["a"].setFuncao(self.a, False)
 		cenaManager.botoes["a"].setFuncaoSolto(self.aSolto)
+	
+	def moverJogador(self, x, y):
+		if self.dialogoManager.emDialogo: return
+		self.jogador.mover(x, y, self)
 		
 	def a(self):
 		if self.dialogoManager.emDialogo:
-			self.dialogoManager.timerTanto = 0
-		
-			
+			dialogoMng = self.dialogoManager
+			if dialogoMng.visivel[0]==1 and dialogoMng.visivel[1]==len(dialogoMng.texto[dialogoMng.visivel[0]])-1:
+				dialogoMng.emDialogo = False
+			else:
+				self.dialogoManager.timerTanto = 0
+		elif self.mapaManager.olhandoParaNpc(self.jogador):
+			self.dialogoManager.comecarDialogo(self.mapaManager.conseguirNpcDialogo(self.jogador))
+	
 	def aSolto(self):
 		if self.dialogoManager.emDialogo:
 			self.dialogoManager.timerTanto = 1
@@ -202,7 +211,8 @@ class Overworld():
 		
 		
 		if not cenaManager.transicao.fading:
-			self.dialogoManager.update()
+			if self.dialogoManager.emDialogo:
+				self.dialogoManager.update()
 			self.jogador.update(self)
 		else:
 			self.jogador.movendo[0] = False
@@ -228,8 +238,9 @@ class Overworld():
 		for grama in self.gramas:
 			pos = [grama[0]-self.camera.x, grama[1]-self.camera.y]
 			self.display.blit(self.gramaBaixo, (pos))
-			self.gramas.remove(grama)	
-		self.dialogoManager.show(self.display)
+			self.gramas.remove(grama)
+		if self.dialogoManager.emDialogo:
+			self.dialogoManager.show(self.display)
 
 class Luta():
 	def __init__(self, cenaManager):

@@ -1,8 +1,9 @@
 from pygame import Rect
-
+from scripts.animacaoManager import AnimacaoManager
 
 class Entidade():
-	def __init__(self, x, y):
+	def __init__(self, x, y, jogo):
+		self.animacaoManager = AnimacaoManager(jogo.spriteManager)
 		self.eJogador = False
 		self.andarAutomatico = 0
 		self.largura = 1
@@ -134,3 +135,8 @@ class Entidade():
 		else:
 			self.dentroDeWarp = None
 			return False
+		
+	def show(self, display, camera, offsetX, offsetY):
+		x = self.xMovendo-camera.x
+		y = self.yMovendo-camera.y-4
+		display.blit(self.animacaoManager.conseguirSprite(), (x, y))

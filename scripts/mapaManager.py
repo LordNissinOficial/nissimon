@@ -5,11 +5,13 @@ from time import time
 from copy import copy
 import json
 from json import load as loadJson
+from scripts.npc import Npc
 from scripts.config import *
 from tmx import TileMap
 
 class MapaManager:
-	def __init__(self, camera):
+	def __init__(self, camera, jogo):
+		self.jogo = jogo
 		self.camera = camera
 		self.display = Surface((DISPLAY_TAMANHO[0]+16, DISPLAY_TAMANHO[1]+16)).convert()
 		self.mapas = {"centro": 0, "cima": 0, "baixo": 0, "esquerda": 0, "direita": 0}
@@ -64,7 +66,7 @@ class MapaManager:
 				if self.conexoes[filename][conexao][0] in self.mapasSalvos:
 					self.mapas[conexao] = copy(self.mapasSalvos[self.conexoes[filename][conexao][0]])
 				else:
-					self.mapas[conexao] = Mapa(self.conexoes[filename][conexao][0], self.camera, self.conexoes[filename][conexao][1], conexao)
+					self.mapas[conexao] = Mapa(self.jogo, self.conexoes[filename][conexao][0], self.camera, self.conexoes[filename][conexao][1], conexao)
 					self.mapasSalvos[self.mapas[conexao].filename] = copy(self.mapas[conexao])
 		
 		
@@ -72,9 +74,22 @@ class MapaManager:
 			if not conexao2 in self.conexoes[filename]:
 				self.mapas[conexao2] = 0
 		if not self.mapas["centro"] or warp:
-			self.mapas["centro"] = Mapa(filename, self.camera, 0, "centro")
+			self.mapas["centro"] = Mapa(self.jogo, filename, self.camera, 0, "centro")
 		self.updateDisplay(self.camera)
 	
+	def olhandoParaNpc(self, jogador):
+		x, y = (jogador.x+jogador.movendo[1][0]*16, jogador.y+jogador.movendo[1][1]*16)
+		for npc in self.mapas["centro"].npcs:
+			if npc.x==x and npc.y==y:
+				return True
+		return False
+		
+	def conseguirNpcDialogo(self, jogador):
+		x, y = (jogador.x+jogador.movendo[1][0]*16, jogador.y+jogador.movendo[1][1]*16)
+		for npc in self.mapas["centro"].npcs:
+			if npc.x==x and npc.y==y:
+				return npc.dialogo
+		
 	def emWarp(self, entidadeRect):
 		for funcao in self.mapas["centro"].funcoes:
 			if funcao.type=="warp":
@@ -97,6 +112,8 @@ class MapaManager:
 	def podeMover(self, x, y, eJogador):
 			if eJogador:
 				if 0<=x<len(self.mapas["centro"].colisoes[0]) and 0<=y<len(self.mapas["centro"].colisoes) and self.mapas["centro"].colisoes[y][x]==65:
+					for npc in self.mapas["centro"].npcs:
+						if npc.x==x*16 and npc.y==y*16: return False
 					return [True, "centro"]
 				else:
 					if y<0 and self.mapas["cima"] and self.mapas["cima"].colisoes[-1][x+self.mapas["cima"].offset]==65:
@@ -116,7 +133,12 @@ class MapaManager:
 						return [True, "direita"]
 					else:
 						print(x, y, self.mapas["centro"].filename)
-						
+#		else:
+#			if 0<=x<len(self.mapas["centro"].colisoes[0]) and 0<=y<len(self.mapas["centro"].colisoes) and self.mapas["centro"].colisoes[y][x]==65:
+#				for npc in self.mapas["centro"].npcs:
+#					if npc.x==x and npc.y==y: return False
+#				return [True, "centro"]
+				
 	def updateAnimacoes(self, camera):
 		for mapa in self.mapas:
 			if not self.mapas[mapa]: continue
@@ -135,7 +157,7 @@ class MapaManager:
 			self.mapas[key].show(display)
 
 class Mapa:
-	def __init__(self, filename, camera, offset, conexao, warp=None):
+	def __init__(self, jogo, filename, camera, offset, conexao, warp=None):
 		self.filename = filename
 		self.fundo = None
 		self.camera = camera
@@ -156,7 +178,7 @@ class Mapa:
 		self.offset = offset
 		self.offsetX = 0
 		self.offsetY = 0
-		self.load(warp)
+		self.load(jogo, warp)
 		#self.updateDisplay(camera)
 	
 #	def __getstate__(self):
@@ -181,12 +203,15 @@ class Mapa:
 #		self.__dict__.update(state)	
 	
 	
-	def load(self, warp=None):
+	def load(self, jogo, warp=None):
 		self.display.fill((0, 0, 0))
 		self.animacoes = []
-		self.dialogos = json.load(open(f"recursos/data/dialogos/{self.filename}.json", "r"))
-		self.npcs = json.load(open(f"recursos/data/npcs/{self.filename}.json", "r"))
-
+		try:
+			self.dialogos = json.load(open(f"recursos/data/dialogos/{self.filename}.json", "r"))
+			self.npcs = self.loadNpcs(jogo, json.load(open(f"recursos/data/npcs/{self.filename}.json", "r")))
+		except:
+			self.dialogos = {}
+			self.npcs = []
 		self.offsetX = 0
 		self.offsetY = 0
 		print("novo mapa", self.filename)
@@ -211,6 +236,12 @@ class Mapa:
 		self.carregarMapa()
 		self.updateDisplay(self.camera)
 	
+	def loadNpcs(self, jogo, jsonData):
+		npcs = []
+		for npc in jsonData:
+			npcs.append(Npc(jogo, npc, self.dialogos[npc["dialogo"]]))
+		return npcs
+		
 	def conseguirAnimacoes(self, tileset):
 		animacoes = []
 		for tile in tileset.tiles:
@@ -360,9 +391,9 @@ class Mapa:
 
 				self.display.blit(tiles[grid[0][y][x]], (x*tileset.tilewidth-(camera.x//16*16)+offsetX, y*tileset.tileheight-(camera.y//16*16)+offsetY))
 
-				for npc in self.npcs:
-					if x==npc["pos"][0] and y==npc["pos"][1]:
-						draw.rect(self.display, (87, 87, 87), (x*tileset.tilewidth-(camera.x//16*16)+offsetX, y*tileset.tileheight-(camera.y//16*16)+offsetY-4, 16, 16))
+
+#					if x==npc["pos"][0] and y==npc["pos"][1]:
+#						draw.rect(self.display, (87, 87, 87), (x*tileset.tilewidth-(camera.x//16*16)+offsetX, y*tileset.tileheight-(camera.y//16*16)+offsetY-4, 16, 16))
 		self.display.set_colorkey(FUNDO_SPRITESHEET)
 	
 	def show(self, display):
@@ -372,4 +403,6 @@ class Mapa:
 			display.blit(self.fundo[0], (-self.camera.x%self.fundo[1][0]-self.fundo[1][0], -self.camera.y%self.fundo[1][1]-self.fundo[1][1]))
 
 		display.blit(self.display, (-xDiff, -yDiff))
+		for npc in self.npcs:
+			npc.show(display, self.camera, 0, 0)
 		

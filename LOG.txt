@@ -146,6 +146,16 @@ dia 15:
 
 tempo trabalhando:
 
-0 horas e 0 minutos
+1 horas e 25 minutos
 
 feito:
+•comecado a adicionar npcs e dialogos.
+
+dia 16:
+
+tempo trabalhando:
+
+1 hora
+
+feito:
+•jogador pode conversar com npcs.
