@@ -159,3 +159,13 @@ tempo trabalhando:
 
 feito:
 •jogador pode conversar com npcs.
+
+dia 17:
+
+tempo trabalhando:
+
+0 horas e 30 minutos 
+
+feito:
+•aumentado tamanho da caixa de dialogo.
+•npcs olham para o jogador em dialogo.

@@ -211,6 +211,7 @@ class Overworld():
 		
 		
 		if not cenaManager.transicao.fading:
+			self.mapaManager.update(self)
 			if self.dialogoManager.emDialogo:
 				self.dialogoManager.update()
 			self.jogador.update(self)
@@ -330,11 +331,11 @@ class Luta():
 
 		self.display.blit(self.sprite1, (16, 46))
 		#draw.rect(self.display, (100, 200, 200), (184, 0, 56, 56))
-		self.display.blit(self.sprite2, (184, 0))
+		self.display.blit(self.sprite2, (192, 0))
 		self.showUi()
 	
 	def showUi(self):
-		self.display.blit(self.botoesFundo, (16, 102))
+		self.display.blit(self.botoesFundo, (0, 102))
 		self.showNissimonUi1()
 		self.showNissimonUi2()
 		

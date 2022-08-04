@@ -16,4 +16,4 @@ class Npc(Entidade):
 		self.animacaoManager.load("parado direita", "spritesheets/npcs", [144, 16*sprite], [16, 16], [16, 0], [100])
 		self.animacaoManager.load("parado esquerda", "spritesheets/npcs", [160, 16*sprite], [16, 16], [16, 0], [100])
 		self.animacaoManager.load("parado cima", "spritesheets/npcs", [176, 16*sprite], [16, 16], [16, 0], [100])
-		self.animacaoManager.ativar("parado baixo")
+		self.animacaoManager.ativar("parado esquerda")

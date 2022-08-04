@@ -135,7 +135,12 @@ class Entidade():
 		else:
 			self.dentroDeWarp = None
 			return False
-		
+				
+	def update(self, jogo):
+		self.updateAnimacao()
+		self.animacaoManager.update()
+		self.updateMovimento(jogo)
+
 	def show(self, display, camera, offsetX, offsetY):
 		x = self.xMovendo-camera.x
 		y = self.yMovendo-camera.y-4

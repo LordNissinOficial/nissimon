@@ -40,7 +40,11 @@ class MapaManager:
 #			state["tiles"][key] = image.fromstring(tile, [16, 16], "RGB")
 #		#print(state["tiles"])
 #		self.__dict__.update(state)	
-	
+	def update(self, jogo):
+		for mapa in self.mapas:
+			if self.mapas[mapa]:
+				for npc in self.mapas[mapa].npcs:
+					npc.update(jogo)
 	
 	def novoMapa(self, filename, warp=False):
 		print("\n", filename, "\n")
@@ -88,6 +92,9 @@ class MapaManager:
 		x, y = (jogador.x+jogador.movendo[1][0]*16, jogador.y+jogador.movendo[1][1]*16)
 		for npc in self.mapas["centro"].npcs:
 			if npc.x==x and npc.y==y:
+				print(npc.movendo, jogador.movendo)
+				npc.movendo[1] = [jogador.movendo[1][0]*-1, jogador.movendo[1][1]*-1]
+				print(npc.movendo, jogador.movendo)
 				return npc.dialogo
 		
 	def emWarp(self, entidadeRect):

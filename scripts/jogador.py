@@ -13,8 +13,3 @@ class Jogador(Entidade):
 		self.animacaoManager.load("parado cima", "spritesheets/jogador", [176, 0], [16, 16], [16, 0], [100])
 		self.animacaoManager.ativar("parado baixo")
 		self.eJogador = True
-		
-	def update(self, jogo):
-		self.updateAnimacao()
-		self.animacaoManager.update()
-		self.updateMovimento(jogo)
