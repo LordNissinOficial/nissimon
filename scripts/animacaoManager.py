@@ -21,5 +21,5 @@ class AnimacaoManager:
 			self.animacaoAtual.update()
 		
 	def conseguirSprite(self):
-		if not self.animacaoAtual: return pg.Surface((100, 150, 200))
+		if not self.animacaoAtual: return
 		return self.animacaoAtual.conseguirSprite(self.spriteManager)

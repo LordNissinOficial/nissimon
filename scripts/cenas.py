@@ -177,7 +177,11 @@ class Overworld():
 	def a(self):
 		if self.dialogoManager.emDialogo:
 			dialogoMng = self.dialogoManager
-			if dialogoMng.visivel[0]==1 and dialogoMng.visivel[1]==len(dialogoMng.texto[dialogoMng.visivel[0]])-1:
+			if (dialogoMng.visivel[0]+1)%2==0 and dialogoMng.visivel[1]==len(dialogoMng.texto[dialogoMng.visivel[0]])-1:
+				if dialogoMng.visivel[0]+1<len(dialogoMng.texto):
+					dialogoMng.visivel[0] += 1
+					dialogoMng.visivel[1] = 0
+			if dialogoMng.visivel[0]==len(dialogoMng.texto)-1 and dialogoMng.visivel[1]==len(dialogoMng.texto[dialogoMng.visivel[0]])-1:
 				dialogoMng.emDialogo = False
 			else:
 				self.dialogoManager.timerTanto = 0
@@ -355,9 +359,11 @@ class Luta():
 		#draw.rect(self.display, (0, 0, 0), (xComeco-8, 109-3, textos1Largura+textos1Largura, 32), 1)
 		for y in range(2):
 			for x in range(2):
+				offset = -1 if x==0 else 1
 				if x==self.botaoIndex[0] and y==self.botaoIndex[1]:
-					self.display.blit(self.index, (xComeco-6-9+(textos1Largura+10)*x, 109+16*y))
-				self.display.blit(textos[y][x], (xComeco-6+(textos1Largura+10)*x, 109+16*y))
+					self.display.blit(self.index, (xComeco+3*offset-6+(textos1Largura+offset)*x, 109+16*y+2))
+				
+				self.display.blit(textos[y][x], (xComeco+3*offset+(textos1Largura+offset)*x, 109+16*y))
 #		if self.estado=="botoes":
 #			for y in range(2):
 #				for x in range(2):

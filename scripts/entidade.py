@@ -4,6 +4,7 @@ from scripts.animacaoManager import AnimacaoManager
 class Entidade():
 	def __init__(self, x, y, jogo):
 		self.animacaoManager = AnimacaoManager(jogo.spriteManager)
+
 		self.eJogador = False
 		self.andarAutomatico = 0
 		self.largura = 1
@@ -14,7 +15,7 @@ class Entidade():
 		self.xMovendo = x*16
 		self.mm = False
 		self.yMovendo = y*16
-		self.movendo = [False, [1, 0]]
+		self.movendo = [False, [0, 1]]
 		self.dentroDeWarp = None #id do warp que usou para nao entrar num warp enquanto sai dele.
 	
 	def updateAnimacao(self):

@@ -1,21 +1,13 @@
 from pygame.image import load as loadImage
-from pygame.locals import RLEACCEL
-from pygame.font import (init, Font)
 from functools import cache
 from scripts.config import FUNDO_SPRITESHEET
-
-init()
 
 class SpriteManager():
 	def __init__(self):
 		self.path = "recursos/sprites/"
 		self.spriteAtual = None
-		self.fonte = Font("recursos/alagard.ttf", 16)
 		self.sprites = {}
 		self.fontes = {}
-	
-	def underline(bool):
-		self.fonte.set_underline(bool)
 
 	@cache
 	def load(self, filename, rect=None):

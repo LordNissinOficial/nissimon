@@ -92,9 +92,7 @@ class MapaManager:
 		x, y = (jogador.x+jogador.movendo[1][0]*16, jogador.y+jogador.movendo[1][1]*16)
 		for npc in self.mapas["centro"].npcs:
 			if npc.x==x and npc.y==y:
-				print(npc.movendo, jogador.movendo)
 				npc.movendo[1] = [jogador.movendo[1][0]*-1, jogador.movendo[1][1]*-1]
-				print(npc.movendo, jogador.movendo)
 				return npc.dialogo
 		
 	def emWarp(self, entidadeRect):

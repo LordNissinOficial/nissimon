@@ -10,6 +10,7 @@ class DialogoManager:
 		self.fonte = pg.font.Font("recursos/sprites/fonte.ttf", 8)
 		self.texto = ["Iae nissin meu compade!", "como voce esta se sentindo?"]
 		self.visivel = [0, 0]
+		self.proximoTexto = [False, 0]
 		self.emDialogo = False
 		self.mostrarSeta = 0
 		self.timerTanto = 1
@@ -20,6 +21,7 @@ class DialogoManager:
 		self.texto = dialogo
 		self.visivel = [0, 0]
 		self.timerTanto = 1
+		self.proximoTexto = [False, 0]
 		self.timer = self.timerTanto
 		
 	def update(self):
@@ -33,9 +35,10 @@ class DialogoManager:
 		self.timer = self.timerTanto
 		
 		if self.visivel[1]+1<len(self.texto[self.visivel[0]]):
+			
 			self.visivel[1] += 1
-		else:
-			if self.visivel[0]==0:
+		elif not (self.visivel[0]+1)%2==0:
+			if self.visivel[0]+1<len(self.texto):
 				self.visivel[0] += 1
 				self.visivel[1] = 0
 #			else:
@@ -44,11 +47,20 @@ class DialogoManager:
 	def show(self, display):
 		#pg.draw.rect(display, (255, 255, 255), (0, 104, 256, 40))
 		display.blit(self.caixaTexto, (0, 104))
-		if self.mostrarSeta<14:
-			display.blit(self.seta, (256-20, 144-7))
-		if self.visivel[0]==1:
-			display.blit(self.fonte.render(self.texto[0], 0, (0, 0, 0), (255, 255, 255)), (24, 110))
-			display.blit(self.fonte.render(self.texto[1][0:self.visivel[1]+1], 0, (0, 0, 0), (255, 255, 255)), (24, 126))
+		if self.mostrarSeta<14 and not self.visivel[0]==len(self.texto): 
+			
+			display.blit(self.seta, (256-28, 144-7))
+		
+#		for i in range(max(0, self.visivel[0]-1), self.visivel[0]):
+#			display.blit(self.fonte.render(self.texto[0], 0, (0, 0, 0), (255, 255, 255)), (24, 110+16*i%2))
+		if self.visivel[0]>0:
+			display.blit(self.fonte.render(self.texto[self.visivel[0]-1], 0, (0, 0, 0), (255, 255, 255)), (24, 110))
+			display.blit(self.fonte.render(self.texto[self.visivel[0]][0:self.visivel[1]+1], 0, (0, 0, 0), (255, 255, 255)), (24, 126))
 		else:
 			display.blit(self.fonte.render(self.texto[0][0:self.visivel[1]+1], 0, (0, 0, 0), (255, 255, 255)), (24, 110))
-		
+		#if self.visivel[0]==1:
+#			display.blit(self.fonte.render(self.texto[0], 0, (0, 0, 0), (255, 255, 255)), (24, 110))
+#			display.blit(self.fonte.render(self.texto[1][0:self.visivel[1]+1], 0, (0, 0, 0), (255, 255, 255)), (24, 126))
+#		else:
+#			display.blit(self.fonte.render(self.texto[0][0:self.visivel[1]+1], 0, (0, 0, 0), (255, 255, 255)), (24, 110))
+#		

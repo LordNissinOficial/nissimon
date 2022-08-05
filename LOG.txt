@@ -169,3 +169,12 @@ tempo trabalhando:
 feito:
 •aumentado tamanho da caixa de dialogo.
 •npcs olham para o jogador em dialogo.
+
+dia 18:
+
+tempo programando:
+
+20 minutos
+
+feito:
+•agora dialogos podem ter mais que 2 linhas.
