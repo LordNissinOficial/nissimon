@@ -177,4 +177,14 @@ tempo programando:
 20 minutos
 
 feito:
-•agora dialogos podem ter mais que 2 linhas.
+•agora dialogos podem ter mais que so 2 linhas.
+
+dia 19:
+
+tempo trabalhando:
+
+10 minutos
+
+feito:
+•arrumado bug que o jogador podia parar de andar automaticamente.
+•seta no dialogo e mostrada corretamente.

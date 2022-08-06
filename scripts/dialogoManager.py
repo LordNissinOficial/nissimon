@@ -47,7 +47,7 @@ class DialogoManager:
 	def show(self, display):
 		#pg.draw.rect(display, (255, 255, 255), (0, 104, 256, 40))
 		display.blit(self.caixaTexto, (0, 104))
-		if self.mostrarSeta<14 and not self.visivel[0]==len(self.texto): 
+		if self.mostrarSeta<14 and self.visivel[0]!=len(self.texto)-1 and (self.visivel[0]+1)%2==0 and self.visivel[1]==len(self.texto[self.visivel[0]])-1: 
 			
 			display.blit(self.seta, (256-28, 144-7))
 		

@@ -209,7 +209,7 @@ class Overworld():
 		self.jogador.xMovendo = novoX
 		self.jogador.y = novoY
 		self.jogador.yMovendo = novoY
-		self.jogador.andarAutomatico = 5
+		self.jogador.andarAutomatico = 2
 		
 	def update(self, cenaManager):
 		

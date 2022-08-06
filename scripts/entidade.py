@@ -39,6 +39,7 @@ class Entidade():
 				self.animacaoManager.ativar("parado cima")
 				
 	def mover(self, x, y, jogo, continuarMovendo=False):
+		if self.andarAutomatico>0: return
 		if not self.movendo[0] and (x!=self.movendo[1][0] or y!=self.movendo[1][1]):
 			self.movendo[1] = [x, y]
 			self.moverCount = 10
@@ -48,7 +49,7 @@ class Entidade():
 			self.moverCount-=1
 			return
 
-		if self.andarAutomatico>0: return
+		
 		if not self.movendo[0]:
 			self.movendo[1] = [x, y]
 		
