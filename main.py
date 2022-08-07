@@ -19,8 +19,10 @@ def main():
 	clock = Clock()
 	while cenaManager.rodando:
 		cenaManager.update()
-		cenaManager.show(tela)		
+		cenaManager.show(tela)
+		jogo = cenaManager.estados[cenaManager.estado]		
 		#tela.blit(fonte.render(str(round(clock.get_fps())), 0, (100, 255, 255), (0, 0, 0)), (40, 40))
+		#tela.blit(fonte.render(str(jogo.jogador.moveuCount), 0, (100, 255, 255), (0, 0, 0)), (40, 40))
 		update()
 		clock.tick(fps)
 

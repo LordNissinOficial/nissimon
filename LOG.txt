@@ -188,3 +188,13 @@ tempo trabalhando:
 feito:
 •arrumado bug que o jogador podia parar de andar automaticamente.
 •seta no dialogo e mostrada corretamente.
+
+dia 20:
+
+tempo trabalhando:
+
+1 horas e 35 minutos 
+
+feito:
+•movimento agora e mais fluido.
+•aprimorado spritesheet da casa.

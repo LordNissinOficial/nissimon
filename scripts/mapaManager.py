@@ -104,14 +104,27 @@ class MapaManager:
 		return False
 				
 	def entrarWarp(self, Rect, jogo):
+		warpRect = self.emWarp(Rect)
 		for funcao in self.mapas["centro"].funcoes:
-			if funcao.type=="warp" and self.emWarp(Rect):
-				f = lambda: self.novoMapa(self.conseguirMapaWarp(funcao), True)
-				jogo.fade(f)
+			if funcao.type=="warp" and warpRect.id==funcao.id:
+				
+				print("comeco")
+				for propriedade in funcao.properties:
+					if propriedade.name=="warp id":
+						f = lambda: self.novoMapa(self.conseguirMapaWarp(funcao), True)
+						print(warpRect.id, funcao.id, warpRect.x, funcao.x)
+						print(funcao, propriedade.value)
+						jogo.fade(f, propriedade.value)
+						#break
+					else:
+						print(propriedade.name, propriedade.value)
+				#return 
+				print("fin")
 	
 	def conseguirMapaWarp(self, warp):
 		for propriedade in warp.properties:
 			if propriedade.name=="mapa":
+				print(propriedade.value)
 				return propriedade.value
 
 	def podeMover(self, x, y, eJogador):

@@ -192,8 +192,8 @@ class Overworld():
 		if self.dialogoManager.emDialogo:
 			self.dialogoManager.timerTanto = 1
 			
-	def fade(self, funcao=None):
-		self.cenaManager.fade(lambda: self.jogadorWarp(funcao))
+	def fade(self, funcao, warp):
+		self.cenaManager.fade(lambda: self.jogadorWarp(funcao, warp))
 	
 	def fadein(self):
 		self.cenaManager.fadein(self.jogadorWarp)
@@ -201,9 +201,15 @@ class Overworld():
 	def fadeBatalha(self):
 		self.cenaManager.fadeBatalha()
 		
-	def jogadorWarp(self, funcao):
+	def jogadorWarp(self, funcao, warpId):
 		funcao()
-		warp = self.mapaManager.mapas["centro"].funcoes[0]
+		for funcao in self.mapaManager.mapas["centro"].funcoes:
+			if funcao.type=="warp":
+				for propriedade in funcao.properties:
+					if propriedade.name=="id" and propriedade.value==warpId:
+						warp = funcao
+						break
+				warp = funcao
 		novoX, novoY = (warp.x, warp.y)
 		self.jogador.x = novoX
 		self.jogador.xMovendo = novoX
