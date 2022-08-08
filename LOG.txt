@@ -198,3 +198,13 @@ tempo trabalhando:
 feito:
 •movimento agora e mais fluido.
 •aprimorado spritesheet da casa.
+
+dia 21:
+
+tempo trabalhando:
+
+0 horas e 35 minutos
+
+feito:
+•arrumado bug ao ter mais de 2 warps.
+•jogador agora olha pra direcao correta ao entrar em um warp.

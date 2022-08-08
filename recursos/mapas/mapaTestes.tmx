@@ -834,6 +834,7 @@
         <property name="id" value="1" />
         <property name="warp id" value="1" />
         <property name="mapa" value="casaTestes" />
+        <property name="direcao" value="0,1" />
       </properties>
     </object>
   </objectgroup>

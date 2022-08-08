@@ -47,7 +47,7 @@ class MapaManager:
 					npc.update(jogo)
 	
 	def novoMapa(self, filename, warp=False):
-		print("\n", filename, "\n")
+		print("\n", "novo mapa", filename, "\n")
 		self.display.fill((0, 0, 0))
 		for mapa in self.mapas:	
 			if not self.mapas[mapa]: continue
@@ -107,24 +107,16 @@ class MapaManager:
 		warpRect = self.emWarp(Rect)
 		for funcao in self.mapas["centro"].funcoes:
 			if funcao.type=="warp" and warpRect.id==funcao.id:
-				
-				print("comeco")
 				for propriedade in funcao.properties:
 					if propriedade.name=="warp id":
-						f = lambda: self.novoMapa(self.conseguirMapaWarp(funcao), True)
-						print(warpRect.id, funcao.id, warpRect.x, funcao.x)
-						print(funcao, propriedade.value)
+						a = self.conseguirMapaWarp(funcao)
+						f = lambda: self.novoMapa(a, True)
 						jogo.fade(f, propriedade.value)
-						#break
-					else:
-						print(propriedade.name, propriedade.value)
-				#return 
-				print("fin")
+						break
 	
 	def conseguirMapaWarp(self, warp):
 		for propriedade in warp.properties:
 			if propriedade.name=="mapa":
-				print(propriedade.value)
 				return propriedade.value
 
 	def podeMover(self, x, y, eJogador):
@@ -409,9 +401,6 @@ class Mapa:
 
 				self.display.blit(tiles[grid[0][y][x]], (x*tileset.tilewidth-(camera.x//16*16)+offsetX, y*tileset.tileheight-(camera.y//16*16)+offsetY))
 
-
-#					if x==npc["pos"][0] and y==npc["pos"][1]:
-#						draw.rect(self.display, (87, 87, 87), (x*tileset.tilewidth-(camera.x//16*16)+offsetX, y*tileset.tileheight-(camera.y//16*16)+offsetY-4, 16, 16))
 		self.display.set_colorkey(FUNDO_SPRITESHEET)
 	
 	def show(self, display):

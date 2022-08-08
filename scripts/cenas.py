@@ -209,22 +209,27 @@ class Overworld():
 					if propriedade.name=="id" and propriedade.value==warpId:
 						warp = funcao
 						break
-				warp = funcao
+		for propriedade in warp.properties:
+			if propriedade.name=="direcao":
+				direcao = list(map(int, propriedade.value.split(",")))
+
 		novoX, novoY = (warp.x, warp.y)
 		self.jogador.x = novoX
 		self.jogador.xMovendo = novoX
 		self.jogador.y = novoY
 		self.jogador.yMovendo = novoY
-		self.jogador.andarAutomatico = 2
+		self.jogador.movendo[1] = direcao
+		self.jogador.updateAnimacao()
+		self.jogador.andarAutomatico = 1
 		
 	def update(self, cenaManager):
-		
-		
+
 		if not cenaManager.transicao.fading:
+			self.jogador.update(self)
 			self.mapaManager.update(self)
 			if self.dialogoManager.emDialogo:
 				self.dialogoManager.update()
-			self.jogador.update(self)
+			
 		else:
 			self.jogador.movendo[0] = False
 			self.jogador.x = self.jogador.xMovendo
@@ -242,14 +247,9 @@ class Overworld():
 		if self.camera.mudouPosicao():
 			self.mapaManager.updateDisplay(self.camera)
 
-		self.mapaManager.show(self.mapaDisplay)
-		self.jogador.show(self.mapaDisplay, self.camera, self.mapaManager.mapas["centro"].offsetX, self.mapaManager.mapas["centro"].offsetY)
-		
-		self.display.blit(self.mapaDisplay, (0, 0))
-		for grama in self.gramas:
-			pos = [grama[0]-self.camera.x, grama[1]-self.camera.y]
-			self.display.blit(self.gramaBaixo, (pos))
-			self.gramas.remove(grama)
+		self.mapaManager.show(self.display)
+		self.jogador.show(self.display, self.camera, self.mapaManager.mapas["centro"].offsetX, self.mapaManager.mapas["centro"].offsetY)
+
 		if self.dialogoManager.emDialogo:
 			self.dialogoManager.show(self.display)
 
@@ -257,8 +257,7 @@ class Luta():
 	def __init__(self, cenaManager):
 		self.display = Surface(DISPLAY_TAMANHO).convert()
 		self.fonte = Font("recursos/sprites/fonte.ttf", 8)
-		
-		#self.botoes = [["lutar", "bolsa"], ["nissimon", "fugir"]]
+
 		self.botoes = [["LUTAR", "BOLSA"], ["NISSIMON", "FUGIR"]]
 		self.estado = "botoes"
 		self.botoesFuncoes = [[self.lutar, 0], [0, lambda: self.correr(cenaManager)]]

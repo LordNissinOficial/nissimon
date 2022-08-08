@@ -188,6 +188,7 @@
         <property name="id" value="1" />
         <property name="warp id" value="1" />
         <property name="mapa" value="mapaTestes" />
+        <property name="direcao" value="0,-1" />
       </properties>
     </object>
     <object type="warp" id="2" x="144" y="16" width="16" height="16">
@@ -195,6 +196,7 @@
         <property name="id" value="2" />
         <property name="warp id" value="1" />
         <property name="mapa" value="casaTestesF2" />
+        <property name="direcao" value="0,1" />
       </properties>
     </object>
   </objectgroup>
