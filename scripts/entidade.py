@@ -93,6 +93,9 @@ class Entidade():
 				self.y += y*16
 		else:
 			print("se ferro")
+		
+		jogo.camera.moverPara(self.xMovendo, self.yMovendo, jogo.mapaManager.mapas["centro"])
+		jogo.camera.moverPara(self.xMovendo, self.yMovendo, jogo.mapaManager.mapas["centro"])
 #			self.xMovendo = self.x
 #			self.yMovendo = self.y
 #			self.movendo[0] = True

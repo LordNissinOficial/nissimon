@@ -11,12 +11,16 @@ class DialogoManager:
 		self.texto = ["Iae nissin meu compade!", "como voce esta se sentindo?"]
 		self.visivel = [0, 0]
 		self.proximoTexto = [False, 0]
+		self.ativouTimer = False
+		self.acabarTimer = 0
 		self.emDialogo = False
 		self.mostrarSeta = 0
 		self.timerTanto = 1
 		self.timer = self.timerTanto
 
 	def comecarDialogo(self, dialogo):
+		self.ativouTimer = False
+		self.acabarTimer = 0
 		self.emDialogo = True
 		self.texto = dialogo
 		self.visivel = [0, 0]
@@ -26,6 +30,9 @@ class DialogoManager:
 		
 	def update(self):
 		if not self.emDialogo: return
+		if self.acabarTimer>0:
+			self.acabarTimer-=1
+			
 		self.mostrarSeta = (self.mostrarSeta+1)%20
 		#print(self.timerTanto)
 		if self.timer>0:
@@ -41,6 +48,13 @@ class DialogoManager:
 			if self.visivel[0]+1<len(self.texto):
 				self.visivel[0] += 1
 				self.visivel[1] = 0
+			else:
+				if not self.ativouTimer:
+					self.ativouTimer = True
+					self.acabarTimer = 15
+					
+		
+		
 #			else:
 #				self.emDialogo = False
 				

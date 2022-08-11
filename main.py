@@ -21,8 +21,22 @@ def main():
 		cenaManager.update()
 		cenaManager.show(tela)
 		jogo = cenaManager.estados[cenaManager.estado]		
-		tela.blit(fonte.render(str(round(clock.get_fps())), 0, (100, 255, 255), (0, 0, 0)), (40, 40))
-		#tela.blit(fonte.render(str(jogo.jogador.moveuCount), 0, (100, 255, 255), (0, 0, 0)), (40, 40))
+		#tela.blit(fonte.render(str(round(clock.get_fps())), 0, (100, 255, 255), (0, 0, 0)), (40, 40))
+		m = ""
+		for key in jogo.mapaManager.mapas:
+			if jogo.mapaManager.mapas[key]:
+				m += f"{key}:{jogo.mapaManager.mapas[key].filename} "
+			else:
+				m += f"{key}:0 "
+		a = ""
+		for key in jogo.mapaManager.mapas:
+			if jogo.mapaManager.mapas[key]:
+				a += f"{key}:{jogo.mapaManager.mapas[key].conexao} "
+			else:
+				a += f"{key}:0 "
+#		tela.blit(fonte.render(str(m), 0, (100, 255, 255), (0, 0, 0)), (40, 60))
+#		tela.blit(fonte.render(str(a), 0, (100, 255, 255), (0, 0, 0)), (40, 80))
+#		tela.blit(fonte.render(f"{jogo.camera.x}|{jogo.camera.y}", 0, (100, 255, 255), (0, 0, 0)), (40, 80))
 		update()
 		clock.tick(fps)
 

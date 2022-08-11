@@ -181,7 +181,7 @@ class Overworld():
 				if dialogoMng.visivel[0]+1<len(dialogoMng.texto):
 					dialogoMng.visivel[0] += 1
 					dialogoMng.visivel[1] = 0
-			if dialogoMng.visivel[0]==len(dialogoMng.texto)-1 and dialogoMng.visivel[1]==len(dialogoMng.texto[dialogoMng.visivel[0]])-1:
+			if dialogoMng.visivel[0]==len(dialogoMng.texto)-1 and dialogoMng.visivel[1]==len(dialogoMng.texto[dialogoMng.visivel[0]])-1 and dialogoMng.acabarTimer==0:
 				dialogoMng.emDialogo = False
 			else:
 				self.dialogoManager.timerTanto = 0
@@ -244,7 +244,7 @@ class Overworld():
 				self.fadeBatalha()
 
 	def show(self):		
-		if self.camera.mudouPosicao():
+		if self.camera.mudouPosicao() or True:
 			self.mapaManager.updateDisplay(self.camera)
 
 		self.mapaManager.show(self.display)

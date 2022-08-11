@@ -10,6 +10,6 @@ class Jogador(Entidade):
 		self.animacaoManager.load("parado baixo", "spritesheets/jogador", [128, 0], [16, 16], [16, 0], [100])
 		self.animacaoManager.load("parado direita", "spritesheets/jogador", [144, 0], [16, 16], [16, 0], [100])
 		self.animacaoManager.load("parado esquerda", "spritesheets/jogador", [160, 0], [16, 16], [16, 0], [100])
-		self.animacaoManager.load("parado cima", "spritesheets/jogador", [176, 0], [16, 16], [16, 0], [100])
-		self.animacaoManager.ativar("parado baixo")
+		self.animacaoManager.load("parado cima", "spritesheets/jogador", [176, 0], [16, 16], [16, 0], [100])	
+		self.movendo[1] = [1, 0]
 		self.eJogador = True

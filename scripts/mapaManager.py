@@ -18,8 +18,7 @@ class MapaManager:
 		self.mapasSalvos = {}
 		self.conexoes = loadJson(open("recursos/data/conexoes.json", "r"))
 		self.novoMapa("casaTestes")
-		#self.updateDisplay(camera)
-	
+
 #	def __getstate__(self):
 #		state = self.__dict__.copy()
 #		#state["tilesetImg"] = image.tostring(state['tilesetImg'], "RGB")
@@ -61,9 +60,10 @@ class MapaManager:
 			for mapa in self.mapas:
 					if not self.mapas[mapa]: continue
 					if self.conexoes[filename][conexao][0]==self.mapas[mapa].filename:
-						self.mapas[mapa].conexao = conexao
+						
 						conseguiuMapa = True
 						self.mapas[conexao] = copy(self.mapas[mapa])
+	#					self.mapas[conexao].conexao = conexao
 						break
 
 			if not conseguiuMapa:
@@ -79,6 +79,9 @@ class MapaManager:
 				self.mapas[conexao2] = 0
 		if not self.mapas["centro"] or warp:
 			self.mapas["centro"] = Mapa(self.jogo, filename, self.camera, 0, "centro")
+		for conexao in self.mapas:
+			if self.mapas[conexao]:
+				self.mapas[conexao].conexao = conexao
 		self.updateDisplay(self.camera)
 	
 	def olhandoParaNpc(self, jogador):
@@ -141,8 +144,8 @@ class MapaManager:
 						print("novo", self.mapas["direita"].filename)
 						self.novoMapa(self.mapas["direita"].filename)
 						return [True, "direita"]
-					else:
-						print(x, y, self.mapas["centro"].filename)
+
+						#print(x, y, self.mapas["centro"].filename)
 #		else:
 #			if 0<=x<len(self.mapas["centro"].colisoes[0]) and 0<=y<len(self.mapas["centro"].colisoes) and self.mapas["centro"].colisoes[y][x]==65:
 #				for npc in self.mapas["centro"].npcs:
@@ -161,6 +164,7 @@ class MapaManager:
 			self.mapas[key].updateDisplay(camera)
 		
 	def show(self, display):
+		self.display.fill((0, 0, 20))
 		for key in self.mapas:
 			if not self.mapas[key]:
 				continue
@@ -258,7 +262,7 @@ class Mapa:
 			for frame in tile.animation:
 				frame.tileid += 1
 			animacoes.append([tile.animation, 0, time()])
-			print(tile.animation[0].duration)
+			#print(tile.animation[0].duration)
 		return animacoes
 		
 	def conseguirFundo(self, filename):
@@ -385,7 +389,7 @@ class Mapa:
 		tiles = self.tiles
 		tileset = self.tileset
 		grid = self.grid
-		
+		#self.display.fill((0, 0, 20))
 		for y in range(self.minY, self.maxY):
 			for x in range(self.minX, self.maxX):
 				offsetX = 0

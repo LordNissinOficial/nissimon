@@ -208,3 +208,13 @@ tempo trabalhando:
 feito:
 •arrumado bug ao ter mais de 2 warps.
 •jogador agora olha pra direcao correta ao entrar em um warp.
+
+dia 22(10/8/2022):
+
+tempo trabalhando:
+
+0 horas e 30 minutos
+
+feito:
+•arrumado bug da camera ao mover para um mapa conectado.
+•arrumado bug ao mover de um mapa conectado para outro.
