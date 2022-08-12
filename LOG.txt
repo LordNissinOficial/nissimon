@@ -218,3 +218,12 @@ tempo trabalhando:
 feito:
 •arrumado bug da camera ao mover para um mapa conectado.
 •arrumado bug ao mover de um mapa conectado para outro.
+
+dia 23:
+
+tempo trabalhando:
+
+0 horas e 50 minutos
+
+feito:
+•feito novo tileset para o segundo andar da casa.
