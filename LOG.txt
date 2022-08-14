@@ -227,3 +227,12 @@ tempo trabalhando:
 
 feito:
 •feito novo tileset para o segundo andar da casa.
+
+dia 24:
+
+tempo trabalhando:
+
+0 horas e 15 minutos
+
+feito:
+•editado tileset do overworld.
