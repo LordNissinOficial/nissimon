@@ -10,6 +10,7 @@ class Camera:
 
 		self.largura = int(DISPLAY_TAMANHO[0]//16)
 		self.altura = int(DISPLAY_TAMANHO[1]//16)
+		print(self.largura, self.altura)
 	
 	def moverPara(self, x, y, mapa):
 

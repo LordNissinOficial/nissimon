@@ -1,8 +1,7 @@
 {
 "mapaTestes": {
 	"cima": ["MapaTestes2", 0],
-	"esquerda": ["MapaTestes4", 0],
-	"direita": ["MapaTestes3", 0]
+	"esquerda": ["MapaTestes4", 0]
 },
 "MapaTestes2": {
 	"baixo": ["mapaTestes", 0]

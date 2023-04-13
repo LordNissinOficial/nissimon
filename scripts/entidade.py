@@ -16,6 +16,7 @@ class Entidade():
 		self.xMovendo = x*16
 		self.warpPraIr = None
 		self.yMovendo = y*16
+		self.emEventoAndar = False
 		self.movendo = [False, [0, 1]]
 		self.dentroDeWarp = None #id do warp que usou para nao entrar num warp enquanto sai dele.
 	
@@ -39,9 +40,11 @@ class Entidade():
 			elif self.movendo[1][1]==-1 and self.animacaoManager.animacaoNome!="parado cima":
 				self.animacaoManager.ativar("parado cima")
 				
-	def mover(self, x, y, jogo, continuarMovendo=False):
+	def mover(self, x, y, jogo, continuarMovendo=False, evento=False):
+		#print("mover ja no jogador", evento)
+		self.emEventoAndar = evento
 		if self.andarAutomatico>0: return
-		if not self.movendo[0] and (x!=self.movendo[1][0] or y!=self.movendo[1][1]):
+		if not self.movendo[0] and (x!=self.movendo[1][0] or y!=self.movendo[1][1]) and not evento:
 			self.movendo[1] = [x, y]
 			if self.moveuCount>5:
 				self.moverCount = 5
@@ -123,8 +126,15 @@ class Entidade():
 
 			if self.xMovendo==self.x and self.yMovendo==self.y:
 				self.movendo[0] = False
+				if self.emEventoAndar:
+					jogo.eventoManager.terminouAcao = True
+					self.emEventoAndar = False
 				if self.eJogador:
 					jogo.checarGrama(self.x, self.y)
+				#	if not self.emEventoAndar:
+					jogo.checarEvento()
+					#print("por favor funcione")
+					
 				if self.eJogador and self.emWarp(jogo, (self.x, self.y, self.largura*16, self.altura*16)):
 						self.movendo[0] = False					
 						jogo.mapaManager.entrarWarp(Rect((self.x, self.y, self.largura*8, self.altura*8)), jogo)

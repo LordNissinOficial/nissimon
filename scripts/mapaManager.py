@@ -121,7 +121,12 @@ class MapaManager:
 		for propriedade in warp.properties:
 			if propriedade.name=="mapa":
 				return propriedade.value
-
+	
+	def emEvento(self, jogador):
+		for funcao in self.mapas["centro"].funcoes:
+			if funcao.type=="evento" and funcao.x==jogador.x and funcao.y==jogador.y:
+				return funcao.properties[0].value
+	
 	def podeMover(self, x, y, eJogador):
 			if eJogador:
 				if 0<=x<len(self.mapas["centro"].colisoes[0]) and 0<=y<len(self.mapas["centro"].colisoes) and self.mapas["centro"].colisoes[y][x]==65:
@@ -153,6 +158,7 @@ class MapaManager:
 #				return [True, "centro"]
 				
 	def updateAnimacoes(self, camera):
+		#return
 		for mapa in self.mapas:
 			if not self.mapas[mapa]: continue
 			self.mapas[mapa].updateAnimacoes(camera)
@@ -160,13 +166,13 @@ class MapaManager:
 	def updateDisplay(self, camera):
 		self.display.fill((0, 0, 0))
 		for key in self.mapas:
-			if not self.mapas[key]: continue
+			if not self.mapas[key]: continue # or key!="centro": continue
 			self.mapas[key].updateDisplay(camera)
 		
 	def show(self, display):
 		self.display.fill((0, 0, 20))
 		for key in self.mapas:
-			if not self.mapas[key]:
+			if not self.mapas[key]: # or key!="centro":
 				continue
 			self.mapas[key].show(display)
 
@@ -235,7 +241,7 @@ class Mapa:
 			self.offsetX = (self.camera.largura-self.mapa.width)//2*16
 		if self.mapa.height<self.camera.altura:
 			self.offsetY = (self.camera.altura-self.mapa.height)//2*16
-			
+		print("offset", self.offsetX, self.offsetY)
 		self.funcoes = self.mapa.layers[-1].objects
 		
 		self.tileset = self.mapa.tilesets[0]
@@ -257,8 +263,13 @@ class Mapa:
 		return npcs
 		
 	def conseguirAnimacoes(self, tileset):
+		print(tileset.tiles)
+		#print(tileset.animation)
 		animacoes = []
 		for tile in tileset.tiles:
+			#print(list(tile))
+			print(self.filename)
+			print(tile.id+1)
 			for frame in tile.animation:
 				frame.tileid += 1
 			animacoes.append([tile.animation, 0, time()])
@@ -344,7 +355,7 @@ class Mapa:
 				copia = self.tiles[animacao[0][0].tileid].copy()
 				self.tiles[animacao[0][0].tileid] = self.tiles[animacao[0][animacao[1]].tileid].copy()
 				self.tiles[animacao[0][animacao[1]].tileid] = copia
-				self.updateDisplay(camera)
+				#self.updateDisplay(camera)
 				
 	def updateDisplay(self, camera):
 		self.display.fill(FUNDO_SPRITESHEET)

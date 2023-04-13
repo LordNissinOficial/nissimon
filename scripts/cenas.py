@@ -13,6 +13,7 @@ from scripts.dialogoManager import DialogoManager
 from scripts.spriteManager import SpriteManager
 from scripts.spritesheet import SpriteSheet
 from scripts.mapaManager import MapaManager
+from scripts.eventoManager import EventoManager
 from scripts.camera import Camera
 from scripts.jogador import Jogador
 from scripts.config import *
@@ -23,6 +24,8 @@ class CenaManager():
 	
 	"""classe principal que cuida do jogo atual"""	
 	def __init__(self):
+		self.aaa = not True
+		self.scale = 6
 		self.nissimonData = json.load(open("recursos/data/nissimons.json", "r"))
 		self.movimentosData = json.load(open("recursos/data/movimentos.json", "r"))
 		self.party = [Nissimon(self.nissimonData["charmander"])]
@@ -135,7 +138,10 @@ class CenaManager():
 			self.transicao.show(displayCopia)
 			scale(displayCopia, TELA_TAMANHO, tela)
 			return
-
+#		if self.aaa:
+#			tela.fill((0, 0, 0))
+#			tela.blit(scale(self.estados[self.estado].display, (int(256*self.scale), int(144*self.scale))), (int(1920-256*self.scale)/2, int(1080-144*self.scale)/2))
+		#else:
 		scale(self.estados[self.estado].display, TELA_TAMANHO, tela)
 	
 	def showUi(self):
@@ -146,13 +152,14 @@ class Overworld():
 	def __init__(self, cenaManager):
 		self.spriteManager = cenaManager.spriteManager
 		self.dialogoManager = DialogoManager()
+		self.eventoManager = EventoManager(self)
 		self.gramaBaixo = image.load("recursos/sprites/gramas/grama_baixo.png").convert()
 		self.gramaBaixo.set_colorkey((100, 100, 100))
 		self.spriteManager.load("spritesheets/ui")
 		self.camera = Camera()	
 		self.jogador = Jogador(3, 4, self)
 		self.gramas = []
-		self.display = Surface((256, 144)).convert()
+		self.display = Surface(DISPLAY_TAMANHO).convert()
 		self.mapaDisplay = Surface((DISPLAY_TAMANHO)).convert()
 		self.mapaManager = MapaManager(self.camera,  self)
 		self.botoes = {}
@@ -170,11 +177,20 @@ class Overworld():
 		cenaManager.botoes["a"].setFuncao(self.a, False)
 		cenaManager.botoes["a"].setFuncaoSolto(self.aSolto)
 	
-	def moverJogador(self, x, y):
+	def moverJogador(self, x, y, emEvento=False):
+#		self.cenaManager.aaa = not self.cenaManager.aaa
 		if self.dialogoManager.emDialogo: return
-		self.jogador.mover(x, y, self)
+		#print(evento, "mover jogador")
+		self.jogador.mover(x, y, self, evento=emEvento)
+	
+	def checarEvento(self):
+		evento = self.mapaManager.emEvento(self.jogador)
+		print(evento)
+		if evento:
+			#print("rodando evento")
+			self.eventoManager.rodarEventoScript(evento)
 		
-	def a(self):
+	def a(self, emEvento=False):
 		if self.dialogoManager.emDialogo:
 			dialogoMng = self.dialogoManager
 			if (dialogoMng.visivel[0]+1)%2==0 and dialogoMng.visivel[1]==len(dialogoMng.texto[dialogoMng.visivel[0]])-1:
@@ -187,7 +203,8 @@ class Overworld():
 				self.dialogoManager.timerTanto = 0
 		elif self.mapaManager.olhandoParaNpc(self.jogador):
 			self.dialogoManager.comecarDialogo(self.mapaManager.conseguirNpcDialogo(self.jogador))
-	
+		if emEvento:
+			self.eventoManager.terminouAcao = True
 	def aSolto(self):
 		if self.dialogoManager.emDialogo:
 			self.dialogoManager.timerTanto = 1
@@ -223,13 +240,12 @@ class Overworld():
 		self.jogador.andarAutomatico = 1
 		
 	def update(self, cenaManager):
-
 		if not cenaManager.transicao.fading:
 			self.jogador.update(self)
 			self.mapaManager.update(self)
+			self.eventoManager.update()
 			if self.dialogoManager.emDialogo:
-				self.dialogoManager.update()
-			
+				self.dialogoManager.update()			
 		else:
 			self.jogador.movendo[0] = False
 			self.jogador.x = self.jogador.xMovendo
@@ -244,8 +260,8 @@ class Overworld():
 				self.fadeBatalha()
 
 	def show(self):		
-		if self.camera.mudouPosicao() or True:
-			self.mapaManager.updateDisplay(self.camera)
+	#	if self.camera.mudouPosicao():
+		self.mapaManager.updateDisplay(self.camera)
 
 		self.mapaManager.show(self.display)
 		self.jogador.show(self.display, self.camera, self.mapaManager.mapas["centro"].offsetX, self.mapaManager.mapas["centro"].offsetY)
@@ -262,6 +278,7 @@ class Luta():
 		self.estado = "botoes"
 		self.botoesFuncoes = [[self.lutar, 0], [0, lambda: self.correr(cenaManager)]]
 		self.botaoIndex = [0, 0]
+		self.botaoIndexAntigo = [0, 0]
 		self.index = image.load("recursos/sprites/batalha/index.png").convert()
 		self.hpBar = image.load("recursos/sprites/batalha/hp_bar.png").convert()
 		self.botoesFundo = image.load("recursos/sprites/caixa_de_texto.png").convert()
@@ -280,6 +297,7 @@ class Luta():
 	
 	def voltar(self):
 		self.estado = "botoes"
+		self.botaoIndex = list(self.botaoIndexAntigo)
 		
 	def lutar(self):
 		self.estado = "ataques"
@@ -302,9 +320,11 @@ class Luta():
 		cenaManager.botoes["a"].setFuncao(self.fazerFuncao, False)
 	
 	def fazerFuncao(self):
+		
 		if self.estado=="botoes":
 			if self.botoesFuncoes[self.botaoIndex[1]][self.botaoIndex[0]]:
 				self.botoesFuncoes[self.botaoIndex[1]][self.botaoIndex[0]]()
+				self.botaoIndexAntigo = list(self.botaoIndex)
 		else:
 			ataque = self.nissimon1.ataques[self.botaoIndex[1]][self.botaoIndex[0]]
 			if ataque:

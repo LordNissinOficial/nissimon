@@ -41,7 +41,7 @@ class Botao():
 	def show(self, display, spriteManager):
 		if not self.pressionado and self.imgNormal:
 			img = spriteManager.load("spritesheets/ui", self.imgNormal)
-			img.set_alpha(60)
+			img.set_alpha(80)
 			display.blit(img, self.Rect)
 		elif self.pressionado and self.imgPressionando:
 			img = spriteManager.load("spritesheets/ui", self.imgPressionando)

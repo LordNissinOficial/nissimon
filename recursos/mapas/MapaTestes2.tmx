@@ -9,10 +9,67 @@
     <property name="sw6" value="3" />
   </properties>
   <tileset firstgid="1" name="overworld" columns="8" tilecount="64" tileheight="16" tilewidth="16">
-    <image source="overworld.png" width="128" height="128" />
-  </tileset>
-  <tileset firstgid="65" name="colisoes_v2" columns="8" tilecount="64" tileheight="16" tilewidth="16">
-    <image source="colisoes_v2.png" width="128" height="128" />
+    <image source="../sprites/tilesets/overworld.png" width="128" height="128" />
+    <tile id="1">
+      <animation>
+        <frame tileid="1" duration="500" />
+        <frame tileid="0" duration="500" />
+      </animation>
+    </tile>
+    <tile id="34">
+      <animation>
+        <frame tileid="34" duration="500" />
+        <frame tileid="37" duration="500" />
+      </animation>
+    </tile>
+    <tile id="35">
+      <animation>
+        <frame tileid="35" duration="500" />
+        <frame tileid="38" duration="500" />
+      </animation>
+    </tile>
+    <tile id="36">
+      <animation>
+        <frame tileid="36" duration="500" />
+        <frame tileid="39" duration="500" />
+      </animation>
+    </tile>
+    <tile id="42">
+      <animation>
+        <frame tileid="42" duration="500" />
+        <frame tileid="45" duration="500" />
+      </animation>
+    </tile>
+    <tile id="43">
+      <animation>
+        <frame tileid="43" duration="500" />
+        <frame tileid="46" duration="500" />
+      </animation>
+    </tile>
+    <tile id="44">
+      <animation>
+        <frame tileid="44" duration="500" />
+        <frame tileid="47" duration="500" />
+      </animation>
+    </tile>
+    <tile id="50">
+      <animation>
+        <frame tileid="50" duration="500" />
+        <frame tileid="53" duration="500" />
+      </animation>
+    </tile>
+    <tile id="51">
+      <animation>
+        <frame tileid="51" duration="500" />
+        <frame tileid="54" duration="500" />
+      </animation>
+    </tile>
+    <tile id="52">
+      <animation>
+        <frame tileid="52" duration="500" />
+        <frame tileid="55" duration="500" />
+      </animation>
+    </tile>
   </tileset>
   <layer name="Tile 1" width="20" height="20">
     <data>
@@ -125,9 +182,9 @@
       <tile gid="28" />
       <tile gid="28" />
       <tile gid="28" />
-      <tile gid="20" />
-      <tile gid="20" />
-      <tile gid="20" />
+      <tile gid="17" />
+      <tile gid="17" />
+      <tile gid="17" />
       <tile gid="28" />
       <tile gid="28" />
       <tile gid="28" />
@@ -143,216 +200,13 @@
       <tile gid="28" />
       <tile gid="28" />
       <tile gid="28" />
-      <tile gid="20" />
-      <tile gid="20" />
+      <tile gid="17" />
+      <tile gid="17" />
       <tile gid="26" />
       <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="20" />
-      <tile gid="20" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="20" />
-      <tile gid="20" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="20" />
-      <tile gid="20" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="20" />
-      <tile gid="26" />
-      <tile gid="1" />
-      <tile gid="2" />
-      <tile gid="2" />
-      <tile gid="2" />
-      <tile gid="2" />
-      <tile gid="2" />
-      <tile gid="2" />
-      <tile gid="2" />
-      <tile gid="3" />
-      <tile gid="26" />
-      <tile gid="20" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="9" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="11" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="9" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="11" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="9" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="11" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="9" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="11" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="9" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="11" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="9" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="10" />
-      <tile gid="11" />
-      <tile gid="26" />
-      <tile gid="26" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="12" />
       <tile gid="26" />
       <tile gid="17" />
-      <tile gid="18" />
-      <tile gid="18" />
-      <tile gid="18" />
-      <tile gid="18" />
-      <tile gid="18" />
-      <tile gid="18" />
-      <tile gid="18" />
-      <tile gid="19" />
-      <tile gid="26" />
-      <tile gid="12" />
+      <tile gid="17" />
       <tile gid="28" />
       <tile gid="28" />
       <tile gid="28" />
@@ -361,6 +215,11 @@
       <tile gid="28" />
       <tile gid="28" />
       <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="17" />
+      <tile gid="17" />
       <tile gid="26" />
       <tile gid="26" />
       <tile gid="26" />
@@ -368,30 +227,228 @@
       <tile gid="26" />
       <tile gid="26" />
       <tile gid="26" />
+      <tile gid="17" />
+      <tile gid="17" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
       <tile gid="26" />
       <tile gid="26" />
       <tile gid="26" />
       <tile gid="26" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="28" />
-      <tile gid="12" />
-      <tile gid="12" />
-      <tile gid="12" />
-      <tile gid="12" />
       <tile gid="26" />
       <tile gid="26" />
       <tile gid="26" />
-      <tile gid="12" />
-      <tile gid="12" />
-      <tile gid="12" />
-      <tile gid="12" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="17" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="2" />
+      <tile gid="2" />
+      <tile gid="2" />
+      <tile gid="2" />
+      <tile gid="2" />
+      <tile gid="2" />
+      <tile gid="1" />
+      <tile gid="1" />
+      <tile gid="26" />
+      <tile gid="17" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="35" />
+      <tile gid="36" />
+      <tile gid="36" />
+      <tile gid="36" />
+      <tile gid="36" />
+      <tile gid="36" />
+      <tile gid="36" />
+      <tile gid="37" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="43" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="45" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="43" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="45" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="43" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="45" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="43" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="45" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="43" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="44" />
+      <tile gid="45" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="9" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="51" />
+      <tile gid="52" />
+      <tile gid="52" />
+      <tile gid="52" />
+      <tile gid="52" />
+      <tile gid="52" />
+      <tile gid="52" />
+      <tile gid="53" />
+      <tile gid="26" />
+      <tile gid="9" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="28" />
+      <tile gid="9" />
+      <tile gid="9" />
+      <tile gid="9" />
+      <tile gid="9" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="26" />
+      <tile gid="9" />
+      <tile gid="9" />
+      <tile gid="9" />
+      <tile gid="9" />
       <tile gid="28" />
       <tile gid="28" />
       <tile gid="28" />
