@@ -149,7 +149,8 @@ class MapaManager:
 						print("novo", self.mapas["direita"].filename)
 						self.novoMapa(self.mapas["direita"].filename)
 						return [True, "direita"]
-
+			else:
+				return [True, "centro"]
 						#print(x, y, self.mapas["centro"].filename)
 #		else:
 #			if 0<=x<len(self.mapas["centro"].colisoes[0]) and 0<=y<len(self.mapas["centro"].colisoes) and self.mapas["centro"].colisoes[y][x]==65:

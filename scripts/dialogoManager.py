@@ -10,6 +10,7 @@ class DialogoManager:
 		self.fonte = pg.font.Font("recursos/sprites/fonte.ttf", 8)
 		self.texto = ["Iae nissin meu compade!", "como voce esta se sentindo?"]
 		self.visivel = [0, 0]
+		self.evento = False
 		self.proximoTexto = [False, 0]
 		self.ativouTimer = False
 		self.acabarTimer = 0
@@ -18,7 +19,8 @@ class DialogoManager:
 		self.timerTanto = 1
 		self.timer = self.timerTanto
 
-	def comecarDialogo(self, dialogo):
+	def comecarDialogo(self, dialogo, evento=False):
+		self.evento=evento
 		self.ativouTimer = False
 		self.acabarTimer = 0
 		self.emDialogo = True

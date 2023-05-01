@@ -8,6 +8,7 @@ from enum import Enum
 from scripts.nissimon import Nissimon
 from scripts.transicao import (Transicao, TransicaoBatalha)
 from scripts.uiComponentes import Botao
+from scripts.uiComponentes import TopDownMenu
 from scripts.inventario import Inventario
 from scripts.dialogoManager import DialogoManager
 from scripts.spriteManager import SpriteManager
@@ -44,29 +45,33 @@ class CenaManager():
 
 	def setBotoes(self):
 		botoes = self.botoes
-		botoes["cima"] = Botao(16+4, DISPLAY_TAMANHO_REAL[1]-56+4)
+		botoes["cima"] = Botao(16+4, DISPLAY_TAMANHO_REAL[1]-56+4, self)
 		botoes["cima"].imgNormal = (4, 0, 2, 2)
 		botoes["cima"].imgPressionando = (4, 2, 2, 2)
 		
-		botoes["baixo"] = Botao(16+4, DISPLAY_TAMANHO_REAL[1]-24+4)
+		botoes["baixo"] = Botao(16+4, DISPLAY_TAMANHO_REAL[1]-24+4, self)
 		botoes["baixo"].imgNormal = (6, 0, 2, 2)
 		botoes["baixo"].imgPressionando = (6, 2, 2, 2)
 		
-		botoes["esquerda"] = Botao(4, DISPLAY_TAMANHO_REAL[1]-40+4)
+		botoes["esquerda"] = Botao(4, DISPLAY_TAMANHO_REAL[1]-40+4, self)
 		botoes["esquerda"].imgNormal = (0, 0, 2, 2)
 		botoes["esquerda"].imgPressionando = (0, 2, 2, 2)
 		
-		botoes["direita"] = Botao(32+4, DISPLAY_TAMANHO_REAL[1]-40+4)
+		botoes["direita"] = Botao(32+4, DISPLAY_TAMANHO_REAL[1]-40+4, self)
 		botoes["direita"].imgNormal = (2, 0, 2, 2)
 		botoes["direita"].imgPressionando = (2, 2, 2, 2)
 		
-		botoes["b"] = Botao(DISPLAY_TAMANHO[0]-32-14, DISPLAY_TAMANHO_REAL[1]-24+4)
+		botoes["b"] = Botao(DISPLAY_TAMANHO[0]-32-14, DISPLAY_TAMANHO_REAL[1]-24+4, self)
 		botoes["b"].imgNormal = (8, 0, 2, 2)
 		botoes["b"].imgPressionando = (8, 2, 2, 2)
 		
-		botoes["a"] = Botao(DISPLAY_TAMANHO[0]-16-4, DISPLAY_TAMANHO_REAL[1]-24+4)
+		botoes["a"] = Botao(DISPLAY_TAMANHO[0]-16-4, DISPLAY_TAMANHO_REAL[1]-24+4, self)
 		botoes["a"].imgNormal = (10, 0, 2, 2)
 		botoes["a"].imgPressionando = (10, 2, 2, 2)
+		
+		botoes["start"] = Botao(DISPLAY_TAMANHO[0]/2-8, DISPLAY_TAMANHO_REAL[1]-24+4, self)
+		botoes["start"].imgNormal = (12, 0, 2, 2)
+		botoes["start"].imgPressionando = (12, 2, 2, 2)
 		
 	def fade(self, funcao=None):
 		for botao in self.botoes:
@@ -150,9 +155,11 @@ class CenaManager():
 			
 class Overworld():
 	def __init__(self, cenaManager):
+		self.cenaManager = cenaManager
 		self.spriteManager = cenaManager.spriteManager
 		self.dialogoManager = DialogoManager()
 		self.eventoManager = EventoManager(self)
+		self.topDownMenu = TopDownMenu(160, 0, ["NISIMON", "ARTEFA.", "Nissin", "SALVAR", "OPCOES", "SAIR"], [])
 		self.gramaBaixo = image.load("recursos/sprites/gramas/grama_baixo.png").convert()
 		self.gramaBaixo.set_colorkey((100, 100, 100))
 		self.spriteManager.load("spritesheets/ui")
@@ -163,20 +170,52 @@ class Overworld():
 		self.mapaDisplay = Surface((DISPLAY_TAMANHO)).convert()
 		self.mapaManager = MapaManager(self.camera,  self)
 		self.botoes = {}
+		self.podeMover = True
 	
 	def setUp(self, cenaManager):
 		self.setUpBotoes(cenaManager)
 		
 	def setUpBotoes(self, cenaManager):
-		cenaManager.botoes["cima"].setFuncao(lambda: self.moverJogador(0, -1), True)
-		cenaManager.botoes["baixo"].setFuncao(lambda: self.moverJogador(0, 1), True)
+		cenaManager.botoes["cima"].setFuncao(lambda: self.mover(-1), True)
+		cenaManager.botoes["baixo"].setFuncao(lambda: self.mover(1), True)
 		cenaManager.botoes["esquerda"].setFuncao(lambda: self.moverJogador(-1, 0), True)
 		cenaManager.botoes["direita"].setFuncao(lambda: self.moverJogador(1, 0), True)
 		
+		cenaManager.botoes["start"].setFuncao(self.start, False)
 		cenaManager.botoes["b"].setFuncao(None, False)
 		cenaManager.botoes["a"].setFuncao(self.a, False)
 		cenaManager.botoes["a"].setFuncaoSolto(self.aSolto)
 	
+	def mover(self, valor):
+		if self.topDownMenu.ativo:
+			self.topDownMenu.mover(valor)
+		else:
+			self.moverJogador(0, valor)
+			
+	def start(self):
+		if self.dialogoManager.emDialogo: return
+		self.topDownMenu.ativo = not self.topDownMenu.ativo
+		self.cenaManager.botoes["cima"].funcionarPressionando = not self.cenaManager.botoes["cima"].funcionarPressionando
+		self.cenaManager.botoes["baixo"].funcionarPressionando = not self.cenaManager.botoes["baixo"].funcionarPressionando
+		
+	def travarBotoes(self, emEvento=False):
+		for key in self.cenaManager.botoes:
+			self.cenaManager.botoes[key].travarBotao(evento=emEvento)
+			
+	def destravarBotoes(self, emEvento=False):
+		for key in self.cenaManager.botoes:
+			self.cenaManager.botoes[key].destravarBotao(evento=emEvento)	
+	
+	def travarPersonagens(self, emEvento=False):
+		print("travando")
+		self.podeMover = False
+		if emEvento: self.eventoManager.terminouAcao = True
+		
+	def destravarPersonagens(self, emEvento=False):
+		print("destravando")
+		self.podeMover = True
+		if emEvento: self.eventoManager.terminouAcao = True
+			
 	def moverJogador(self, x, y, emEvento=False):
 #		self.cenaManager.aaa = not self.cenaManager.aaa
 		if self.dialogoManager.emDialogo: return
@@ -191,6 +230,7 @@ class Overworld():
 			self.eventoManager.rodarEventoScript(evento)
 		
 	def a(self, emEvento=False):
+		if self.topDownMenu.ativo: return
 		if self.dialogoManager.emDialogo:
 			dialogoMng = self.dialogoManager
 			if (dialogoMng.visivel[0]+1)%2==0 and dialogoMng.visivel[1]==len(dialogoMng.texto[dialogoMng.visivel[0]])-1:
@@ -203,7 +243,7 @@ class Overworld():
 				self.dialogoManager.timerTanto = 0
 		elif self.mapaManager.olhandoParaNpc(self.jogador):
 			self.dialogoManager.comecarDialogo(self.mapaManager.conseguirNpcDialogo(self.jogador))
-		if emEvento:
+		if emEvento or self.dialogoManager.evento:
 			self.eventoManager.terminouAcao = True
 	def aSolto(self):
 		if self.dialogoManager.emDialogo:
@@ -265,7 +305,8 @@ class Overworld():
 
 		self.mapaManager.show(self.display)
 		self.jogador.show(self.display, self.camera, self.mapaManager.mapas["centro"].offsetX, self.mapaManager.mapas["centro"].offsetY)
-
+		if self.topDownMenu.ativo:
+			self.topDownMenu.show(self.display)
 		if self.dialogoManager.emDialogo:
 			self.dialogoManager.show(self.display)
 

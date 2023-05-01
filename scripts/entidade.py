@@ -41,6 +41,7 @@ class Entidade():
 				self.animacaoManager.ativar("parado cima")
 				
 	def mover(self, x, y, jogo, continuarMovendo=False, evento=False):
+		if not jogo.podeMover and not evento: return
 		#print("mover ja no jogador", evento)
 		self.emEventoAndar = evento
 		if self.andarAutomatico>0: return
@@ -63,67 +64,60 @@ class Entidade():
 		podeMover = self.podeMover(x, y, jogo)
 		if not podeMover:	return
 		self.moveuCount = 0
+		if podeMover[1]=="cima":
+			self.xMovendo = self.x
+			self.yMovendo = len(jogo.mapaManager.mapas["centro"].colisoes)*16
+			self.movendo[0] = True
+			self.x += x*16
+			self.y = len(jogo.mapaManager.mapas["centro"].colisoes)*16-16
+		elif podeMover[1]=="baixo":
+			self.xMovendo = self.x
+			self.yMovendo = -16
+			self.movendo[0] = True
+			self.x += x*16
+			self.y = 0
+		elif podeMover[1]=="esquerda":
+			self.xMovendo = len(jogo.mapaManager.mapas["centro"].colisoes[0])*16
+			self.yMovendo = self.y
+			self.movendo[0] = True
+			self.x = len(jogo.mapaManager.mapas["centro"].colisoes[0])*16-16
+			self.y += y*16
+		elif podeMover[1]=="direita":
+			self.xMovendo = -16
+			self.yMovendo = self.y
+			self.movendo[0] = True
+			self.x = 0
+			self.y += y*16	
+		elif podeMover[1]=="centro":
+			self.xMovendo = self.x
+			self.yMovendo = self.y
+			self.movendo[0] = True
+			self.x += x*16
+			self.y += y*16
+
 		if self.eJogador:
-			if podeMover[1]=="cima":
-				self.xMovendo = self.x
-				self.yMovendo = len(jogo.mapaManager.mapas["centro"].colisoes)*16
-				self.movendo[0] = True
-				self.x += x*16
-				self.y = len(jogo.mapaManager.mapas["centro"].colisoes)*16-16
-			elif podeMover[1]=="baixo":
-				self.xMovendo = self.x
-				self.yMovendo = -16
-				self.movendo[0] = True
-				self.x += x*16
-				self.y = 0
-			elif podeMover[1]=="esquerda":
-				self.xMovendo = len(jogo.mapaManager.mapas["centro"].colisoes[0])*16
-				self.yMovendo = self.y
-				self.movendo[0] = True
-				self.x = len(jogo.mapaManager.mapas["centro"].colisoes[0])*16-16
-				self.y += y*16
-			elif podeMover[1]=="direita":
-				self.xMovendo = -16
-				self.yMovendo = self.y
-				self.movendo[0] = True
-				self.x = 0
-				self.y += y*16	
-			elif podeMover[1]=="centro":
-				self.xMovendo = self.x
-				self.yMovendo = self.y
-				self.movendo[0] = True
-				self.x += x*16
-				self.y += y*16
-		else:
-			print("se ferro")
-		
-		jogo.camera.moverPara(self.xMovendo, self.yMovendo, jogo.mapaManager.mapas["centro"])
-		jogo.camera.moverPara(self.xMovendo, self.yMovendo, jogo.mapaManager.mapas["centro"])
-#			self.xMovendo = self.x
-#			self.yMovendo = self.y
-#			self.movendo[0] = True
-#			self.x += x*16
-#			self.y += y*16
-	
+			jogo.camera.moverPara(self.xMovendo, self.yMovendo, jogo.mapaManager.mapas["centro"])
+			jogo.camera.moverPara(self.xMovendo, self.yMovendo, jogo.mapaManager.mapas["centro"])
+			
 	def podeMover(self, x, y, jogo):
 		novoX = self.x//16+x
-		novoY = self.y//16+y
-		
+		novoY = self.y//16+y	
 		return jogo.mapaManager.podeMover(novoX, novoY, self.eJogador)
 
 	def updateMovimento(self, jogo):
 		if not self.movendo[0] and self.moveuCount<6:
 			self.moveuCount += 1
+			
 		if self.andarAutomatico>0:
 			self.andarAutomatico -= 1
 			if self.andarAutomatico==0:
 				self.mover(self.movendo[1][0], self.movendo[1][1], jogo)
-		if self.movendo[0]:
-			
+				
+		if self.movendo[0]:			
 			movendo = True
 			self.xMovendo += self.movendo[1][0]
 			self.yMovendo += self.movendo[1][1]
-
+			
 			if self.xMovendo==self.x and self.yMovendo==self.y:
 				self.movendo[0] = False
 				if self.emEventoAndar:
@@ -133,8 +127,7 @@ class Entidade():
 					jogo.checarGrama(self.x, self.y)
 				#	if not self.emEventoAndar:
 					jogo.checarEvento()
-					#print("por favor funcione")
-					
+
 				if self.eJogador and self.emWarp(jogo, (self.x, self.y, self.largura*16, self.altura*16)):
 						self.movendo[0] = False					
 						jogo.mapaManager.entrarWarp(Rect((self.x, self.y, self.largura*8, self.altura*8)), jogo)

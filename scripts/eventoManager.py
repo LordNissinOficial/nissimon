@@ -28,8 +28,8 @@ class EventoManager():
 				self.lista[0]()				
 	
 			if self.terminouAcao:
-				print("terminou acao")
-				print()
+				#print("terminou acao")
+#				print()
 				self.lista.pop(0)
 				self.terminouAcao = False
 				self.comecouAcao = False
@@ -38,7 +38,7 @@ class EventoManager():
 		if self.lista: return
 		self.lista = []
 		eval(f"{self.jogo.mapaManager.mapas['centro'].filename}Eventos.{evento}(self.jogo, self.lista)")
-		print(self.lista, 123)
+		#print(self.lista, 123)
 		#self.rodarScript()
 		#thread = Thread(target=self.rodarScript)
 #		thread.run()
