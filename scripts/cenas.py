@@ -69,9 +69,13 @@ class CenaManager():
 		botoes["a"].imgNormal = (10, 0, 2, 2)
 		botoes["a"].imgPressionando = (10, 2, 2, 2)
 		
-		botoes["start"] = Botao(DISPLAY_TAMANHO[0]/2-8, DISPLAY_TAMANHO_REAL[1]-24+4, self)
+		botoes["select"] = Botao(DISPLAY_TAMANHO[0]/2-18, DISPLAY_TAMANHO_REAL[1]-24+4, self)
+		botoes["select"].imgNormal = (12, 0, 2, 2)
+		botoes["select"].imgPressionando = (12, 2, 2, 2)
+		
+		botoes["start"] = Botao(DISPLAY_TAMANHO[0]/2+2, DISPLAY_TAMANHO_REAL[1]-24+4, self)
 		botoes["start"].imgNormal = (12, 0, 2, 2)
-		botoes["start"].imgPressionando = (12, 2, 2, 2)
+		botoes["start"].imgPressionando = (12, 2, 2, 2)			
 		
 	def fade(self, funcao=None):
 		for botao in self.botoes:
@@ -159,7 +163,7 @@ class Overworld():
 		self.spriteManager = cenaManager.spriteManager
 		self.dialogoManager = DialogoManager()
 		self.eventoManager = EventoManager(self)
-		self.topDownMenu = TopDownMenu(160, 0, ["NISIMON", "ARTEFA.", "Nissin", "SALVAR", "OPCOES", "SAIR"], [])
+		self.topDownMenu = TopDownMenu(156, 0, ["NISIMON", "ARTEFA.", "Nissin", "SALVAR", "OPCOES", "SAIR"], [])
 		self.gramaBaixo = image.load("recursos/sprites/gramas/grama_baixo.png").convert()
 		self.gramaBaixo.set_colorkey((100, 100, 100))
 		self.spriteManager.load("spritesheets/ui")
@@ -176,21 +180,22 @@ class Overworld():
 		self.setUpBotoes(cenaManager)
 		
 	def setUpBotoes(self, cenaManager):
-		cenaManager.botoes["cima"].setFuncao(lambda: self.mover(-1), True)
-		cenaManager.botoes["baixo"].setFuncao(lambda: self.mover(1), True)
-		cenaManager.botoes["esquerda"].setFuncao(lambda: self.moverJogador(-1, 0), True)
-		cenaManager.botoes["direita"].setFuncao(lambda: self.moverJogador(1, 0), True)
+		cenaManager.botoes["cima"].setFuncao(lambda: self.mover(0, -1), True)
+		cenaManager.botoes["baixo"].setFuncao(lambda: self.mover(0, 1), True)
+		cenaManager.botoes["esquerda"].setFuncao(lambda: self.mover(-1, 0), True)
+		cenaManager.botoes["direita"].setFuncao(lambda: self.mover(1, 0), True)
 		
 		cenaManager.botoes["start"].setFuncao(self.start, False)
 		cenaManager.botoes["b"].setFuncao(None, False)
 		cenaManager.botoes["a"].setFuncao(self.a, False)
 		cenaManager.botoes["a"].setFuncaoSolto(self.aSolto)
 	
-	def mover(self, valor):
+	def mover(self, x, y):
 		if self.topDownMenu.ativo:
-			self.topDownMenu.mover(valor)
+			if y:
+				self.topDownMenu.mover(y)
 		else:
-			self.moverJogador(0, valor)
+			self.moverJogador(x, y)
 			
 	def start(self):
 		if self.dialogoManager.emDialogo: return
@@ -245,6 +250,7 @@ class Overworld():
 			self.dialogoManager.comecarDialogo(self.mapaManager.conseguirNpcDialogo(self.jogador))
 		if emEvento or self.dialogoManager.evento:
 			self.eventoManager.terminouAcao = True
+			
 	def aSolto(self):
 		if self.dialogoManager.emDialogo:
 			self.dialogoManager.timerTanto = 1
@@ -321,6 +327,7 @@ class Luta():
 		self.botaoIndex = [0, 0]
 		self.botaoIndexAntigo = [0, 0]
 		self.index = image.load("recursos/sprites/batalha/index.png").convert()
+		self.index.set_colorkey((100, 100, 100))
 		self.hpBar = image.load("recursos/sprites/batalha/hp_bar.png").convert()
 		self.botoesFundo = image.load("recursos/sprites/caixa_de_texto.png").convert()
 		self.nissimonUi1 = image.load("recursos/sprites/batalha/nissimon_ui.png").convert()

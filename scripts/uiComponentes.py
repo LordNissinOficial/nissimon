@@ -87,5 +87,6 @@ class TopDownMenu:
 	def show(self, display):
 		display.blit(self.menuImg, (self.x, self.y))
 		for i, escolha in enumerate(self.escolhas):
-			display.blit(self.fonte.render(escolha, 0, (0, 0, 0), (255, 255, 255)), (self.x+16, self.y+16*i+8))
+			cor = (0, 0, 0) if i==self.opcaoAtual else (80, 80, 80)
+			display.blit(self.fonte.render(escolha, 0, cor, (255, 255, 255)), (self.x+16, self.y+16*i+8))
 		display.blit(self.indexImg, (self.x+8, self.y+16*self.opcaoAtual+8))

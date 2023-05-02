@@ -402,20 +402,23 @@ class Mapa:
 		tileset = self.tileset
 		grid = self.grid
 		#self.display.fill((0, 0, 20))
+		offsetX = 0
+		offsetY = 0
+		if self.conexao=="cima":
+			offsetY = -self.mapa.height*16
+		elif self.conexao=="baixo":
+			offsetY = self.mapa.height*16
+		elif self.conexao=="esquerda":
+			offsetX = -self.mapa.width*16
+		elif self.conexao=="direita":
+			offsetX = self.mapa.width*16
+		
+		cameraX = camera.x//16*16
+		cameraY = camera.y//16*16
 		for y in range(self.minY, self.maxY):
 			for x in range(self.minX, self.maxX):
-				offsetX = 0
-				offsetY = 0
-				if self.conexao=="cima":
-					offsetY = -self.mapa.height*16
-				elif self.conexao=="baixo":
-					offsetY = self.mapa.height*16
-				elif self.conexao=="esquerda":
-					offsetX = -self.mapa.width*16
-				elif self.conexao=="direita":
-					offsetX = self.mapa.width*16
-
-				self.display.blit(tiles[grid[0][y][x]], (x*tileset.tilewidth-(camera.x//16*16)+offsetX, y*tileset.tileheight-(camera.y//16*16)+offsetY))
+			
+				self.display.blit(tiles[grid[0][y][x]], (x*tileset.tilewidth-cameraX+offsetX, y*tileset.tileheight-cameraY+offsetY))
 
 		self.display.set_colorkey(FUNDO_SPRITESHEET)
 	

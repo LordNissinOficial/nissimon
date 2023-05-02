@@ -7,7 +7,7 @@ from profilehooks import profile
 
 init()
 
-@profile(filename="profile.prof")
+#@profile(filename="profile.prof")
 def main():
 	frame = 0
 	fps = 30
