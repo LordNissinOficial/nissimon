@@ -1,5 +1,10 @@
 import pygame as pg
-
+#import pygame.math.lerp as lerp
+def lerp(a, b, percentage):
+    if 0.0 > percentage > 1.0:
+        raise ValueError("valor deve estar entre 0 e 1")
+    return a + (b-a) * percentage
+    
 class Botao():
 	def __init__(self, x, y, cenaManager, funcao=None, funcionarPressionando=False):
 		self.cenaManager = cenaManager
@@ -8,6 +13,7 @@ class Botao():
 		self.funcaoSolto = None
 		self.imgNormal = None
 		self.imgPressionando = None
+		self.img = None
 		self.travar = False
 		if self.imgNormal:
 			self.Rect = pg.Rect((x, y), self.img.get_size())
@@ -64,7 +70,8 @@ class Botao():
 			pg.draw.rect(display, (120, 140, 120), self.Rect)
 
 class TopDownMenu:
-	def __init__(self, x, y, escolhas, funcoes):
+	def __init__(self, cenaManager, x, y, escolhas, funcoes):
+		self.cenaManager = cenaManager
 		self.x = x
 		self.y = y
 		self.escolhas = escolhas
@@ -74,19 +81,31 @@ class TopDownMenu:
 		self.fonte = pg.font.Font("recursos/sprites/fonte.ttf", 8)
 		self.menuImg = pg.image.load("recursos/sprites/topdown_menu.png").convert()
 		self.indexImg = pg.image.load("recursos/sprites/batalha/index.png").convert()
+		self.indexImg.set_colorkey((100, 100, 100))
 		self.menuImg.set_colorkey((100, 100, 100))
+		#self.cores = [pg.Color]
 	
+	def toggle(self):
+		self.ativo = not self.ativo
+		self.cenaManager.botoes["cima"].funcionarPressionando = not self.cenaManager.botoes["cima"].funcionarPressionando
+		self.cenaManager.botoes["baixo"].funcionarPressionando = not self.cenaManager.botoes["baixo"].funcionarPressionando
+		
 	def mover(self, valor):
 		self.opcaoAtual += valor
-		if self.opcaoAtual<0 or self.opcaoAtual==len(self.escolhas):
-			self.opcaoAtual -= valor
+		if self.opcaoAtual<0:
+			self.opcaoAtual = len(self.escolhas)-1
+		elif self.opcaoAtual==len(self.escolhas):
+			self.opcaoAtual = 0
 	
 	def ativarEscolha(self):
-		self.funcoes[self.opcaoAtual]()
+		if not self.funcoes[self.opcaoAtual]:
+			self.cenaManager.estados[self.cenaManager.estado].dialogoManager.comecarDialogo(["botao ainda nao implementado."])
+		else:
+			self.funcoes[self.opcaoAtual]()
 		
 	def show(self, display):
 		display.blit(self.menuImg, (self.x, self.y))
 		for i, escolha in enumerate(self.escolhas):
-			cor = (0, 0, 0) if i==self.opcaoAtual else (80, 80, 80)
+			cor = (0, 0, 0) if i==self.opcaoAtual else (116, 151, 166)
 			display.blit(self.fonte.render(escolha, 0, cor, (255, 255, 255)), (self.x+16, self.y+16*i+8))
 		display.blit(self.indexImg, (self.x+8, self.y+16*self.opcaoAtual+8))

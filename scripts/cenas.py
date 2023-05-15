@@ -115,7 +115,6 @@ class CenaManager():
 					
 	"""updatea o jogo atual"""
 	def update(self):
-		if not self.rodando: return
 		self.lidarEventos()
 		self.estados[self.estado].update(self)
 		if self.transicao.fading:
@@ -130,27 +129,22 @@ class CenaManager():
 			for botao in self.botoes:
 				self.botoes[botao].update()
 
-	
 	"""desenha na tela o display do jogo atual"""
 	def show(self, tela):
-		if not self.rodando: return
 		self.estados[self.estado].show()
 		self.showUi()
 		if self.transicao.fading:			
 			if self.transicao.fadeout:
 				displayCopia = self.estados[self.estado].display.copy()
 			else:
-				self.estados[self.estado].show()
-				self.showUi()
+#				self.estados[self.estado].show()
+#				self.showUi()
 				displayCopia = self.estados[self.estado].display.copy()
 
 			self.transicao.show(displayCopia)
 			scale(displayCopia, TELA_TAMANHO, tela)
 			return
-#		if self.aaa:
-#			tela.fill((0, 0, 0))
-#			tela.blit(scale(self.estados[self.estado].display, (int(256*self.scale), int(144*self.scale))), (int(1920-256*self.scale)/2, int(1080-144*self.scale)/2))
-		#else:
+
 		scale(self.estados[self.estado].display, TELA_TAMANHO, tela)
 	
 	def showUi(self):
@@ -163,7 +157,7 @@ class Overworld():
 		self.spriteManager = cenaManager.spriteManager
 		self.dialogoManager = DialogoManager()
 		self.eventoManager = EventoManager(self)
-		self.topDownMenu = TopDownMenu(156, 0, ["NISIMON", "ARTEFA.", "Nissin", "SALVAR", "OPCOES", "SAIR"], [])
+		self.topDownMenu = TopDownMenu(self.cenaManager, 156, 0, ["NISSIMON", "ARTEFA.", "Nissin", "SALVAR", "OPCOES", "SAIR"], [0, 0, 0, 0, 0, lambda: self.topDownMenu.toggle()])
 		self.gramaBaixo = image.load("recursos/sprites/gramas/grama_baixo.png").convert()
 		self.gramaBaixo.set_colorkey((100, 100, 100))
 		self.spriteManager.load("spritesheets/ui")
@@ -191,6 +185,8 @@ class Overworld():
 		cenaManager.botoes["a"].setFuncaoSolto(self.aSolto)
 	
 	def mover(self, x, y):
+		if self.dialogoManager.emDialogo:
+			return
 		if self.topDownMenu.ativo:
 			if y:
 				self.topDownMenu.mover(y)
@@ -199,9 +195,7 @@ class Overworld():
 			
 	def start(self):
 		if self.dialogoManager.emDialogo: return
-		self.topDownMenu.ativo = not self.topDownMenu.ativo
-		self.cenaManager.botoes["cima"].funcionarPressionando = not self.cenaManager.botoes["cima"].funcionarPressionando
-		self.cenaManager.botoes["baixo"].funcionarPressionando = not self.cenaManager.botoes["baixo"].funcionarPressionando
+		self.topDownMenu.toggle()	
 		
 	def travarBotoes(self, emEvento=False):
 		for key in self.cenaManager.botoes:
@@ -222,20 +216,16 @@ class Overworld():
 		if emEvento: self.eventoManager.terminouAcao = True
 			
 	def moverJogador(self, x, y, emEvento=False):
-#		self.cenaManager.aaa = not self.cenaManager.aaa
 		if self.dialogoManager.emDialogo: return
-		#print(evento, "mover jogador")
 		self.jogador.mover(x, y, self, evento=emEvento)
 	
 	def checarEvento(self):
 		evento = self.mapaManager.emEvento(self.jogador)
 		print(evento)
 		if evento:
-			#print("rodando evento")
 			self.eventoManager.rodarEventoScript(evento)
 		
-	def a(self, emEvento=False):
-		if self.topDownMenu.ativo: return
+	def a(self, emEvento=False):			
 		if self.dialogoManager.emDialogo:
 			dialogoMng = self.dialogoManager
 			if (dialogoMng.visivel[0]+1)%2==0 and dialogoMng.visivel[1]==len(dialogoMng.texto[dialogoMng.visivel[0]])-1:
@@ -246,6 +236,10 @@ class Overworld():
 				dialogoMng.emDialogo = False
 			else:
 				self.dialogoManager.timerTanto = 0
+				
+		elif self.topDownMenu.ativo:
+			self.topDownMenu.ativarEscolha()
+
 		elif self.mapaManager.olhandoParaNpc(self.jogador):
 			self.dialogoManager.comecarDialogo(self.mapaManager.conseguirNpcDialogo(self.jogador))
 		if emEvento or self.dialogoManager.evento:
@@ -306,9 +300,7 @@ class Overworld():
 				self.fadeBatalha()
 
 	def show(self):		
-	#	if self.camera.mudouPosicao():
 		self.mapaManager.updateDisplay(self.camera)
-
 		self.mapaManager.show(self.display)
 		self.jogador.show(self.display, self.camera, self.mapaManager.mapas["centro"].offsetX, self.mapaManager.mapas["centro"].offsetY)
 		if self.topDownMenu.ativo:
@@ -330,6 +322,7 @@ class Luta():
 		self.index.set_colorkey((100, 100, 100))
 		self.hpBar = image.load("recursos/sprites/batalha/hp_bar.png").convert()
 		self.botoesFundo = image.load("recursos/sprites/caixa_de_texto.png").convert()
+		self.botoesFundo.set_colorkey((100, 100, 100))
 		self.nissimonUi1 = image.load("recursos/sprites/batalha/nissimon_ui.png").convert()
 		self.nissimonUi2 = flip(self.nissimonUi1, True, False)
 		self.nissimon1 = cenaManager.party[0]

@@ -200,28 +200,6 @@ class Mapa:
 		self.offsetX = 0
 		self.offsetY = 0
 		self.load(jogo, warp)
-		#self.updateDisplay(camera)
-	
-#	def __getstate__(self):
-#		state = self.__dict__.copy()
-#		#state["tilesetImg"] = image.tostring(state['tilesetImg'], "RGB")
-#	#	print(state['tiles'], end="\n"*4)
-#		print(self.tiles)
-#		for key, tile in list(state["tiles"].items()):
-#			#print(key, state['tiles'][key])
-#			state['tiles'][key] = image.tostring(tile, "RGB")
-#			
-#		#print(state['tiles'])
-#		return state
-#	
-#	def __setstate__(self, state):
-#		state["tilesetImg"] = image.fromstring(state['tilesetImg'], [128, 128], "RGB")
-#		state["tilesetImg"].set_colorkey((0, 0, 0))
-#		for key, tile in state["tiles"].items():
-#			#print(key, state["tiles"][key])
-#			state["tiles"][key] = image.fromstring(tile, [16, 16], "RGB")
-#		#print(state["tiles"])
-#		self.__dict__.update(state)	
 	
 	
 	def load(self, jogo, warp=None):
@@ -393,15 +371,8 @@ class Mapa:
 			self.minY = 0
 			self.maxY = self.mapa.height
 
-		self.minYAntigo = self.minY
-		self.maxYAntigo = self.maxY
-		self.minXAntigo = self.minX
-		self.maxXAntigo = self.maxX
-
 		tiles = self.tiles
-		tileset = self.tileset
 		grid = self.grid
-		#self.display.fill((0, 0, 20))
 		offsetX = 0
 		offsetY = 0
 		if self.conexao=="cima":
@@ -412,13 +383,13 @@ class Mapa:
 			offsetX = -self.mapa.width*16
 		elif self.conexao=="direita":
 			offsetX = self.mapa.width*16
-		
-		cameraX = camera.x//16*16
-		cameraY = camera.y//16*16
+
+		offsetX -= camera.x//16*16
+		offsetY -= camera.y//16*16
+
 		for y in range(self.minY, self.maxY):
 			for x in range(self.minX, self.maxX):
-			
-				self.display.blit(tiles[grid[0][y][x]], (x*tileset.tilewidth-cameraX+offsetX, y*tileset.tileheight-cameraY+offsetY))
+				self.display.blit(tiles[grid[0][y][x]], (x*16+offsetX, y*16+offsetY))
 
 		self.display.set_colorkey(FUNDO_SPRITESHEET)
 	

@@ -42,3 +42,4 @@ class EventoManager():
 		#self.rodarScript()
 		#thread = Thread(target=self.rodarScript)
 #		thread.run()
+

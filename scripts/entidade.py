@@ -40,6 +40,11 @@ class Entidade():
 			elif self.movendo[1][1]==-1 and self.animacaoManager.animacaoNome!="parado cima":
 				self.animacaoManager.ativar("parado cima")
 				
+	def olhar(self, x, y, jogo, evento=False):
+		self.movendo[1] = [x, y]
+		if evento:
+			jogo.eventoManager.terminouAcao = True
+			
 	def mover(self, x, y, jogo, continuarMovendo=False, evento=False):
 		if not jogo.podeMover and not evento: return
 		#print("mover ja no jogador", evento)

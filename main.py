@@ -15,15 +15,11 @@ def main():
 	tela = set_mode((1920, 1080), flags, 16)
 	fonte = SysFont("Calibri", 14)
 	cenaManager = CenaManager()
-	tela.fill((203, 203, 203))
 	clock = Clock()
 	while cenaManager.rodando:
 		cenaManager.update()
 		cenaManager.show(tela)
-		jogo = cenaManager.estados[cenaManager.estado]		
-		tela.blit(fonte.render(str(round(clock.get_fps())), 0, (100, 255, 255), (0, 0, 0)), (40, 40))
-		#tela.blit(fonte.render("pode mover:"+str(jogo.podeMover), 0, (100, 255, 255), (0, 0, 0)), (40, 50))
-#		tela.blit(fonte.render("evento andar:"+str(jogo.jogador.emEventoAndar), 0, (100, 255, 255), (0, 0, 0)), (40, 65))
+		#tela.blit(fonte.render(str(round(clock.get_fps())), 0, (100, 255, 255), (0, 0, 0)), (40, 40))
 		update()
 		clock.tick(fps)
 
